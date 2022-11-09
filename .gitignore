@@ -38,3 +38,6 @@ out/
 
 # "temporary" build files
 /target
+
+/src/main/resources/application-local.yml
+/src/main/resources/datasource-config.yml

@@ -1,0 +1,6 @@
+spring:
+
+  config:
+    name: gameHaeDuo
+    activate:
+      on-profile: product
