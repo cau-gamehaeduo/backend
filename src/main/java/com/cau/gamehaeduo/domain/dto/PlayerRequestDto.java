@@ -1,5 +1,6 @@
 package com.cau.gamehaeduo.domain.dto;
 
+import com.cau.gamehaeduo.domain.Player;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,4 +15,15 @@ public class PlayerRequestDto {
     private String playStyle;
     private String tier;
     private int price;
+
+    public static Player of(PlayerRequestDto requestDto) {
+        return Player.builder()
+                .status(requestDto.status)
+                .gender(requestDto.gender)
+                .price(requestDto.price)
+                .introduction(requestDto.introduction)
+                .playStyle(requestDto.playStyle)
+                .tier(requestDto.tier)
+                .build();
+    }
 }
