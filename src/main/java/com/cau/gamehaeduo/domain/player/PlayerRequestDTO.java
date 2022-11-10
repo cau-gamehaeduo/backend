@@ -1,6 +1,5 @@
-package com.cau.gamehaeduo.domain.dto;
+package com.cau.gamehaeduo.domain.player;
 
-import com.cau.gamehaeduo.domain.Player;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlayerRequestDto {
+public class PlayerRequestDTO {
     private int gender;
     private String status;
     private String introduction;
@@ -16,8 +15,8 @@ public class PlayerRequestDto {
     private String tier;
     private int price;
 
-    public static Player of(PlayerRequestDto requestDto) {
-        return Player.builder()
+    public static PlayerEntity of(PlayerRequestDTO requestDto) {
+        return PlayerEntity.builder()
                 .status(requestDto.status)
                 .gender(requestDto.gender)
                 .price(requestDto.price)

@@ -1,4 +1,4 @@
-package com.cau.gamehaeduo.domain;
+package com.cau.gamehaeduo.domain.player;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "player")
-public class Player {
+public class PlayerEntity {
     @Id
     @Column(columnDefinition = "INT UNSIGNED")
     private int id;

@@ -1,6 +1,6 @@
 package com.cau.gamehaeduo.controller;
 
-import com.cau.gamehaeduo.domain.dto.PlayerRequestDto;
+import com.cau.gamehaeduo.domain.player.PlayerRequestDTO;
 import com.cau.gamehaeduo.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ public class PlayerController {
     private final PlayerService playerService;
 
     @PostMapping
-    public ResponseEntity<?> registerPlayer(PlayerRequestDto playerDto) {
+    public ResponseEntity<?> registerPlayer(PlayerRequestDTO playerDto) {
         playerService.registerPlayer(playerDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
