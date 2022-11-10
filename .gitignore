@@ -41,4 +41,5 @@ out/
 
 /src/main/resources/application.properties
 /src/main/resources/application-local.yml
+/src/main/resources/application-prod.yml
 /src/main/resources/datasource-config.yml
