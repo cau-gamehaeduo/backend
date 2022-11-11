@@ -27,7 +27,7 @@ public class UserService {
 
     // 사용자 생성
     @Transactional
-    public CreateUserResDTO createUser(CreateUserReqDTO createUserReqDTO) throws BaseException {
+    public CreateUserResDTO createUser(CreateUserReqDTO createUserReqDTO, long kakaoIdx) throws BaseException {
 
         // 닉네임 중복확인
         checkNickname(createUserReqDTO.getNickname());
@@ -43,7 +43,8 @@ public class UserService {
                 createUserReqDTO.getJungle(),
                 createUserReqDTO.getMid(),
                 createUserReqDTO.getAd(),
-                createUserReqDTO.getSupporter()
+                createUserReqDTO.getSupporter(),
+                kakaoIdx
         );
 
         userRepository.createUser(userEntity);

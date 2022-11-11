@@ -9,13 +9,35 @@ public enum BaseResponseStatus {
      * 1000 : 요청 성공
      */
     SUCCESS(true, 1000, "요청에 성공하였습니다."),
+    LOGOUT_SUCCESS(true, 1000, "로그아웃했습니다. 안드로이드의 jwtAccessToken과 jwtRefreshToken을 삭제해주세요."),
 
     /**
      * 2000 : Request 오류
      */
+    REQUEST_ERROR(false, 2000, "입력값을 확인해주세요."),
+    EMPTY_ACCESS_JWT(false, 2001, "Access 토큰을 입력해주세요."),
+    EMPTY_REFRESH_JWT(false, 2002, "Refresh 토큰을 입력해주세요."),
+    INVALID_ACCESS_JWT(false, 2003, "지원되지 않거나 잘못된 Access 토큰 입니다."),
+    INVALID_REFRESH_JWT(false, 2012, "지원되지 않거나 잘못된 Refresh 토큰 입니다."),
+    INVALID_USER_ACCESS_JWT(false,2005,"Access 토큰의 userIdx와 Request의 userIdx가 일치하지 않습니다."),
+    NOT_EXIST_REFRESH_JWT(false,2006,"존재하지 않거나 만료된 Refresh 토큰입니다. 다시 로그인해주세요."),
+    EXPIRED_ACCESS_JWT(false,2007,"만료된 Access 토큰입니다. Refresh 토큰을 이용해서 새로운 Access 토큰을 발급 받으세요."),
+    EXPIRED_REFRESH_JWT(false,2008,"만료된 Refresh 토큰입니다. 다시 로그인해주세요."),
+    EMPTY_USER_IDX(false,2009,"유저 인덱스를 입력해주세요."),
+
+
+    INVALID_ACCESS_KAKAO(false, 2010, "지원되지 않거나 잘못된 Kakao Access 토큰 입니다."),
+    INVALID_REFRESH_KAKAO(false, 2011, "지원되지 않거나 잘못된 Kakao Refresh 토큰 입니다."),
+    EXPIRED_ACCESS_KAKAO(false, 2012, "만료된 Kakao Access 토큰입니다. Kakao Refresh 토큰을 이용해서 새로운 Kakao Access 토큰을 발급 받으세요."),
+    EXPIRED_REFRESH_KAKAO(false,2013,"만료된 Kakao Refresh 토큰입니다. 다시 로그인해주세요."),
 
     /**
-     * 500
+    *
+    */
+
+
+    /**
+     * 5000 SignUP
      */
     SIGNUP_EMPTY_USER_NICKNAME(false, 5001, "닉네임을 입력해주세요."),
     SIGNUP_INVALID_USER_NICKNAME(false, 5002, "닉네임은 영어 또는 한글과 숫자를 조합한 2-10 자리만 가능합니다."),

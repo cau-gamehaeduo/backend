@@ -22,9 +22,10 @@ public class UserEntity {
     private int mid;
     private int ad;
     private int supporter;
+    private long kakaoIdx;
 
 
-    public UserEntity(String nickname, String profilePhotoUrl, int top, int jungle, int mid, int ad, int supporter) {
+    public UserEntity(String nickname, String profilePhotoUrl, int top, int jungle, int mid, int ad, int supporter, long kakaoIdx) {
         this.nickname = nickname;
         this.profilePhotoUrl = profilePhotoUrl;
         this.top = top;
@@ -32,5 +33,6 @@ public class UserEntity {
         this.mid = mid;
         this.ad = ad;
         this.supporter = supporter;
+        this.kakaoIdx = kakaoIdx;
     }
 }

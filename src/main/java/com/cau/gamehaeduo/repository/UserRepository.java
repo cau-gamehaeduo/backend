@@ -22,7 +22,7 @@ public class UserRepository {
 
     public void createUser(UserEntity userEntity) {
         // User 테이블에 데이터 추가
-        String createUserQuery = "insert into User(nickname, profile_photo_url, top, jungle, mid, ad, supporter) values(?,?,?,?,?,?,?)";
+        String createUserQuery = "insert into User(nickname, profile_photo_url, top, jungle, mid, ad, supporter, kakao_id) values(?,?,?,?,?,?,?,?)";
         Object[] createUserParams = new Object[]{
                 userEntity.getNickname(),
                 userEntity.getProfilePhotoUrl(),
@@ -31,6 +31,7 @@ public class UserRepository {
                 userEntity.getMid(),
                 userEntity.getAd(),
                 userEntity.getSupporter(),
+                userEntity.getKakaoIdx()
         };
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 

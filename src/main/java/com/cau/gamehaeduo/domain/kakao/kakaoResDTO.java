@@ -1,0 +1,15 @@
+package com.cau.gamehaeduo.domain.kakao;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class kakaoResDTO {
+    private long kakaoIdx;
+    private String connected_at;
+}
