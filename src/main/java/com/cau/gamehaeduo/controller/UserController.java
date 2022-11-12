@@ -69,7 +69,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/userCheck")
+    @PostMapping("/userCheck")
     public BaseResponse<KakaoMemberCheckResDTO> userCheck(@RequestBody KakaoUserValidReqDTO kakaoUserValidReqDTO){
         try{
             long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccessToken());
