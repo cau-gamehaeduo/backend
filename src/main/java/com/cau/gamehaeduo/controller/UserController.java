@@ -2,12 +2,15 @@ package com.cau.gamehaeduo.controller;
 
 import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponse;
+import com.cau.gamehaeduo.domain.kakao.KakaoMemberCheckResDTO;
+import com.cau.gamehaeduo.domain.kakao.KakaoUserValidReqDTO;
 import com.cau.gamehaeduo.domain.user.CheckNicknameResDTO;
 import com.cau.gamehaeduo.domain.user.CreateUserReqDTO;
 import com.cau.gamehaeduo.domain.user.CreateUserResDTO;
 import com.cau.gamehaeduo.service.KakaoService;
 import com.cau.gamehaeduo.service.UserService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/signUp")
-    public BaseResponse<CreateUserResDTO> createUser (@Valid @RequestBody CreateUserReqDTO createUserReqDTO){
+    public BaseResponse<CreateUserResDTO> createUser (@RequestBody CreateUserReqDTO createUserReqDTO){
         try {
             // 사용자 생성
             long kakaoIdx = kakaoService.checkKakaoUser(createUserReqDTO.getAccessToken());
@@ -45,7 +48,24 @@ public class UserController {
         }
     }
 
-    @GetMapping("/nickname_dupli")
+    @GetMapping("/userCheck")
+    public BaseResponse<KakaoMemberCheckResDTO> userCheck(@RequestBody KakaoUserValidReqDTO kakaoUserValidReqDTO){
+        try{
+            long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccessToken());
+            if(kakaoIdx != 0 ){
+                KakaoMemberCheckResDTO result = userService.checkKakoMember(kakaoIdx);
+                return new BaseResponse<>(result);
+            }else {
+                return new BaseResponse<>(INVALID_ACCESS_KAKAO);
+            }
+        }catch (BaseException e){
+            log.error(" API : api/userCheck" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
+    @GetMapping("/nickname/dupli")
     public BaseResponse<CheckNicknameResDTO> checkNickname(@RequestParam("nickname") String nickname) {
         // 형식적 validation
         if (nickname == null) {
@@ -64,7 +84,7 @@ public class UserController {
             CheckNicknameResDTO result = userService.checkNickname(nickname);
             return new BaseResponse<>(result);
         } catch(BaseException e){
-            log.error(" API : api/signup/dupli" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            log.error(" API : api/nickname/dupli" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
             return new BaseResponse<>(e.getStatus());
         }
 

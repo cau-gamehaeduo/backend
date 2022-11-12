@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class kakaoResDTO {
-    private long kakaoIdx;
-    private String connected_at;
+public class KakaoMemberCheckResDTO {
+    private Boolean isMember;
+    private String resultMessage;
 }

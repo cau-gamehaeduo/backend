@@ -1,30 +1,12 @@
 package com.cau.gamehaeduo.service;
 
 import com.cau.gamehaeduo.domain.base.BaseException;
-import com.cau.gamehaeduo.domain.user.UserEntity;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonElement;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.log4j.Log4j2;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.*;
-import java.util.List;
 import java.util.Map;
 
 import static com.cau.gamehaeduo.domain.base.BaseResponseStatus.*;
@@ -92,8 +74,10 @@ public class KakaoService {
         return 0;
     }
 
-
 }
+
+
+
 
     /**
      *

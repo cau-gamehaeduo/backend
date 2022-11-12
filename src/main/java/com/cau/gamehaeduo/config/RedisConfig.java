@@ -19,7 +19,7 @@ public class RedisConfig {
     private int port;
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
+    public LettuceConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory(host, port);
     }
 

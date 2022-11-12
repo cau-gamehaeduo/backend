@@ -39,6 +39,7 @@ public enum BaseResponseStatus {
     /**
      * 5000 SignUP
      */
+    SIGNUP_ALREADY_EXIST_KAKAO_MEMBER(false,5000, "이미 가입된 회원입니다."),
     SIGNUP_EMPTY_USER_NICKNAME(false, 5001, "닉네임을 입력해주세요."),
     SIGNUP_INVALID_USER_NICKNAME(false, 5002, "닉네임은 영어 또는 한글과 숫자를 조합한 2-10 자리만 가능합니다."),
     SIGNUP_ALREADY_EXIST_NICKNAME(false, 5003, "이미 사용중인 닉네임입니다."),;

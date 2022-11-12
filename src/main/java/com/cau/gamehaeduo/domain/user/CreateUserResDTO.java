@@ -12,4 +12,13 @@ import lombok.Setter;
 public class CreateUserResDTO {
     private Boolean isCreated;
     private String resultMessage;
+
+    private Integer userId;
+    private String nickname;
+    private String profilePhotoUrl;
+    private String status;
+    private String isPlayer;
+
+    private String jwtAccessToken;
+    private String jwtRefreshToken;
 }

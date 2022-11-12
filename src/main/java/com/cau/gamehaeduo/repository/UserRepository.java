@@ -20,7 +20,7 @@ public class UserRepository {
 
     private JdbcTemplate jdbcTemplate;
 
-    public void createUser(UserEntity userEntity) {
+    public int createUser(UserEntity userEntity) {
         // User 테이블에 데이터 추가
         String createUserQuery = "insert into User(nickname, profile_photo_url, top, jungle, mid, ad, supporter, kakao_id) values(?,?,?,?,?,?,?,?)";
         Object[] createUserParams = new Object[]{
@@ -33,11 +33,12 @@ public class UserRepository {
                 userEntity.getSupporter(),
                 userEntity.getKakaoIdx()
         };
+
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
         // userIdx 반환
-//        String lastInsertUserIdxQuery = "select last_insert_id()";
-//        return this.jdbcTemplate.queryForObject(lastInsertUserIdxQuery, int.class);
+        String lastInsertUserIdxQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertUserIdxQuery, int.class);
     }
 
     public int checkNickname(String nickname) {
@@ -47,5 +48,14 @@ public class UserRepository {
                 checkNicknameQuery,
                 int.class,
                 checkNicknameParam);
+    }
+
+    public int checkKakaoMember(long kakaoIdx) {
+        String checkKakaoMemberQuery = "select exists(select kakao_id from User where kakao_id=?)";
+        long  checkKakaoMemberParam = kakaoIdx;
+        return this.jdbcTemplate.queryForObject(
+                checkKakaoMemberQuery,
+                int.class,
+                checkKakaoMemberParam);
     }
 }
