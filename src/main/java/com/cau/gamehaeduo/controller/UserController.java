@@ -36,6 +36,11 @@ public class UserController {
         try {
             // 사용자 생성
             long kakaoIdx = kakaoService.checkKakaoUser(createUserReqDTO.getAccessToken());
+            KakaoMemberCheckResDTO kakaoMemberCheckResDTO = userService.checkKakoMember(kakaoIdx);
+            if(kakaoMemberCheckResDTO.getIsMember()==true){
+                return new BaseResponse<>(SIGNUP_ALREADY_EXIST_KAKAO_MEMBER);
+            }
+
             if (kakaoIdx != 0) {
                 CreateUserResDTO result = userService.createUser(createUserReqDTO,kakaoIdx);
                 return new BaseResponse<>(result);
@@ -50,7 +55,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public BaseResponse<LoginResDTO> login(@RequestBody KakaoUserValidReqDTO kakaoUserValidReqDTO){
         try{
             long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccessToken());

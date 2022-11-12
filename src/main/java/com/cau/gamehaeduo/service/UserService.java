@@ -36,7 +36,6 @@ public class UserService {
 
         // KaKao ID 존재 여부 확인
 
-
         //profile 사진 임시 부여
         String profilePhotoUrl = "https://post-phinf.pstatic.net/MjAxOTEwMjVfMjI3/MDAxNTcxOTg2MjI3ODEw.SG1Y3lnjADkcWM78IG2I-Qu_3VA_Hb-c9xbKmYhB3N8g.ZJ-OjMtdudOxaSuGHD9yhPdmsA7uSI--qPQGuWjptxkg.JPEG/image_5814618121571985358109.jpg?type=w1200";
 
@@ -138,6 +137,23 @@ public class UserService {
         }
     }
 
+    public CheckNicknameResDTO checkAlreadyUser(String nickname) throws BaseException{
+
+        int isNicknameExisted = 0;
+        try {
+            isNicknameExisted = userRepository.checkNickname(nickname);
+        } catch (Exception e) {
+            log.error("DATABASE_ERROR when call UserRepository.checkNickname()");
+        }
+
+        if (isNicknameExisted == 0) {
+            return new CheckNicknameResDTO(false, "사용 가능한 닉네임입니다.");
+        } else {
+            log.error("ILLEGAL_ARG_ERROR when call UserRepository.checkNickname() because nickname is already used");
+            throw new BaseException(SIGNUP_ALREADY_EXIST_NICKNAME);
+
+        }
+    }
 
 
 }
