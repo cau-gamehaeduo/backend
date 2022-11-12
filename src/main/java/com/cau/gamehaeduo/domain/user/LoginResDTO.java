@@ -9,11 +9,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateUserResDTO {
-    private Boolean isCreated;
+public class LoginResDTO {
     private String resultMessage;
 
-    private int userId;
+    private Integer userId;
     private String nickname;
     private String profilePhotoUrl;
     private String status;

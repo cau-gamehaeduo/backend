@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateUserResDTO {
-    private Boolean isCreated;
-    private String resultMessage;
+public class UserLoginInfo {
 
     private int userId;
     private String nickname;
@@ -19,6 +17,4 @@ public class CreateUserResDTO {
     private String status;
     private String isPlayer;
 
-    private String jwtAccessToken;
-    private String jwtRefreshToken;
 }

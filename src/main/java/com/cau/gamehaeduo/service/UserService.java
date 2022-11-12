@@ -2,10 +2,7 @@ package com.cau.gamehaeduo.service;
 
 import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.kakao.KakaoMemberCheckResDTO;
-import com.cau.gamehaeduo.domain.user.CheckNicknameResDTO;
-import com.cau.gamehaeduo.domain.user.CreateUserReqDTO;
-import com.cau.gamehaeduo.domain.user.CreateUserResDTO;
-import com.cau.gamehaeduo.domain.user.UserEntity;
+import com.cau.gamehaeduo.domain.user.*;
 import com.cau.gamehaeduo.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +71,31 @@ public class UserService {
                 );
     }
 
+    public LoginResDTO loginUser(long kakaoIdx) {
+        UserLoginInfo userLoginInfo = userRepository.getUserLoginInfo(kakaoIdx);
+        // JWT !!!!!
+        String jwtAccessToken = jwtService.createAccessToken(userLoginInfo.getUserId());
+        String jwtRefreshToken = jwtService.createRefreshToken(userLoginInfo.getUserId());
+
+
+        return new LoginResDTO(
+                "로그인에 성공하였습니다.",
+                userLoginInfo.getUserId(),
+                userLoginInfo.getNickname(),
+                userLoginInfo.getProfilePhotoUrl(),
+                userLoginInfo.getStatus(),
+                userLoginInfo.getIsPlayer(),
+                jwtAccessToken,
+                jwtRefreshToken
+        );
+    }
+
+
+
+
+
+
+
     //DB에 같은 카카오 ID로 가입되어 있는 회원이 있는지 확인
     public KakaoMemberCheckResDTO checkKakoMember(long kakaoIdx){
 
@@ -87,9 +109,9 @@ public class UserService {
         }
 
         if(isKakaoMembereixsted == 0){
-            return new KakaoMemberCheckResDTO(false,"회원가입을 시작합니다.");
+            return new KakaoMemberCheckResDTO(false,"회원가입을 시작해주세요.");
         }else{
-            return new KakaoMemberCheckResDTO(true,"이미 회원이므로 로그인 합니다.");
+            return new KakaoMemberCheckResDTO(true,"이미 회원이므로 로그인 해주세요.");
         }
 
     }
@@ -115,7 +137,6 @@ public class UserService {
 
         }
     }
-
 
 
 

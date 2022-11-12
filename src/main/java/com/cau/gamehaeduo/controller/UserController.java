@@ -7,6 +7,7 @@ import com.cau.gamehaeduo.domain.kakao.KakaoUserValidReqDTO;
 import com.cau.gamehaeduo.domain.user.CheckNicknameResDTO;
 import com.cau.gamehaeduo.domain.user.CreateUserReqDTO;
 import com.cau.gamehaeduo.domain.user.CreateUserResDTO;
+import com.cau.gamehaeduo.domain.user.LoginResDTO;
 import com.cau.gamehaeduo.service.KakaoService;
 import com.cau.gamehaeduo.service.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -48,10 +49,25 @@ public class UserController {
         }
     }
 
+
+    @GetMapping("/login")
+    public BaseResponse<LoginResDTO> login(@RequestBody KakaoUserValidReqDTO kakaoUserValidReqDTO){
+        try{
+            long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccesstoken());
+            LoginResDTO result = userService.loginUser(kakaoIdx);
+            return new BaseResponse<>(result);
+
+        }catch (BaseException e){
+            log.error(" API : api/login" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
     @GetMapping("/userCheck")
     public BaseResponse<KakaoMemberCheckResDTO> userCheck(@RequestBody KakaoUserValidReqDTO kakaoUserValidReqDTO){
         try{
-            long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccessToken());
+            long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccesstoken());
             if(kakaoIdx != 0 ){
                 KakaoMemberCheckResDTO result = userService.checkKakoMember(kakaoIdx);
                 return new BaseResponse<>(result);

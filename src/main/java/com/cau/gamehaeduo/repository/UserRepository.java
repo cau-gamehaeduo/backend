@@ -1,8 +1,11 @@
 package com.cau.gamehaeduo.repository;
 
+import com.cau.gamehaeduo.domain.user.LoginResDTO;
 import com.cau.gamehaeduo.domain.user.UserEntity;
+import com.cau.gamehaeduo.domain.user.UserLoginInfo;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -57,5 +60,29 @@ public class UserRepository {
                 checkKakaoMemberQuery,
                 int.class,
                 checkKakaoMemberParam);
+    }
+
+
+    public UserLoginInfo getUserLoginInfo(long kakaoIdx){
+        String userLoginInfoQuery =
+                "select u.user_id, u.nickname, u.profile_photo_url, u.status, u.is_player\n" +
+                        "from User u \n" +
+                        "where u.kakao_id = ?";
+
+
+        try {
+            return this.jdbcTemplate.queryForObject(userLoginInfoQuery,
+                    (rs, row) -> new UserLoginInfo(
+                            rs.getInt("user_id"),
+                            rs.getString("nickname"),
+                            rs.getString("profile_photo_url"),
+                            rs.getString("status"),
+                            rs.getString("is_player")
+                    ),
+                    kakaoIdx);
+        }
+        catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 }
