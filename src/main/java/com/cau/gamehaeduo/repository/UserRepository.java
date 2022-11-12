@@ -2,6 +2,7 @@ package com.cau.gamehaeduo.repository;
 
 import com.cau.gamehaeduo.domain.user.UserEntity;
 import com.cau.gamehaeduo.domain.user.UserLoginInfo;
+import java.util.List;
 import javax.sql.DataSource;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,28 @@ public class UserRepository {
         catch (EmptyResultDataAccessException e){
             return null;
         }
+    }
+
+    public List<UserEntity> selectByUserId(int userIdx) {
+        return jdbcTemplate.query("select * from User where user_id = ?",
+                (rs, row) -> new UserEntity(
+                        rs.getInt("user_id"),
+                        rs.getString("nickname"),
+                        rs.getString("profile_photo_url"),
+                        rs.getString("is_player"),
+                        rs.getFloat("rating"),
+                        rs.getString("created_at"),
+                        rs.getString("status"),
+                        rs.getInt("top"),
+                        rs.getInt("jungle"),
+                        rs.getInt("mid"),
+                        rs.getInt("ad"),
+                        rs.getInt("supporter"),
+                        rs.getLong("kakao_id")
+                ),
+                userIdx
+                );
+
     }
 
     public void registerPlayer(int userIndex) {
