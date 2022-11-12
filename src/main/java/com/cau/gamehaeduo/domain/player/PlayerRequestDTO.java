@@ -17,6 +17,7 @@ public class PlayerRequestDTO {
 
     public static PlayerEntity of(PlayerRequestDTO requestDto) {
         return PlayerEntity.builder()
+                .id(requestDto.userIndex)  // user index
                 .status("A")
                 .gender(requestDto.gender)
                 .price(requestDto.price)
