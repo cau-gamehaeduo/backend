@@ -48,7 +48,6 @@ public class UserEntity {
     private int ad;
     @Column
     private int supporter;
-    private long kakaoIdx;
 
     @Column(name = "kakao_id")
     private Long kakaoIdx;
