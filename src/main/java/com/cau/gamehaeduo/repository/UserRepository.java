@@ -1,16 +1,13 @@
 package com.cau.gamehaeduo.repository;
 
-import com.cau.gamehaeduo.domain.user.LoginResDTO;
 import com.cau.gamehaeduo.domain.user.UserEntity;
 import com.cau.gamehaeduo.domain.user.UserLoginInfo;
+import javax.sql.DataSource;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-
-import javax.sql.DataSource;
 
 @Log4j2
 @Repository
@@ -84,5 +81,10 @@ public class UserRepository {
         catch (EmptyResultDataAccessException e){
             return null;
         }
+    }
+
+    public void registerPlayer(int userIndex) {
+        String userRegisterPlayerQuery = "update User set is_player='Y' where user_id=?";
+        this.jdbcTemplate.update(userRegisterPlayerQuery, userIndex);
     }
 }
