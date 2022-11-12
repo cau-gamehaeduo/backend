@@ -45,6 +45,6 @@ public class PlayerEntity {
 
     @MapsId
     @OneToOne(mappedBy = "player")
-    @JoinColumn(name = "player_id")
+    @JoinColumn(referencedColumnName = "player_id")
     private UserEntity user;
 }
