@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class KakaoUserValidReqDTO {
-    private String accesstoken;
+    private String accessToken;
 }

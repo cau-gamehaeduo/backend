@@ -50,7 +50,7 @@ public class UserEntity {
     private int supporter;
 
     @Column(name = "kakao_id")
-    private Long kakaoIdx;
+    private long kakaoIdx;
 
     @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
