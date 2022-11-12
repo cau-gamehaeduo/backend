@@ -53,7 +53,7 @@ public class UserController {
     @GetMapping("/login")
     public BaseResponse<LoginResDTO> login(@RequestBody KakaoUserValidReqDTO kakaoUserValidReqDTO){
         try{
-            long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccesstoken());
+            long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccessToken());
             LoginResDTO result = userService.loginUser(kakaoIdx);
             return new BaseResponse<>(result);
 
@@ -67,7 +67,7 @@ public class UserController {
     @GetMapping("/userCheck")
     public BaseResponse<KakaoMemberCheckResDTO> userCheck(@RequestBody KakaoUserValidReqDTO kakaoUserValidReqDTO){
         try{
-            long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccesstoken());
+            long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccessToken());
             if(kakaoIdx != 0 ){
                 KakaoMemberCheckResDTO result = userService.checkKakoMember(kakaoIdx);
                 return new BaseResponse<>(result);
