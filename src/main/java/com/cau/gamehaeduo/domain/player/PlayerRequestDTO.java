@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlayerRequestDTO {
+    private int userIndex;
     private int gender;
-    private String status;
     private String introduction;
     private String playStyle;
     private String tier;
@@ -17,7 +17,7 @@ public class PlayerRequestDTO {
 
     public static PlayerEntity of(PlayerRequestDTO requestDto) {
         return PlayerEntity.builder()
-                .status(requestDto.status)
+                .status("A")
                 .gender(requestDto.gender)
                 .price(requestDto.price)
                 .introduction(requestDto.introduction)
