@@ -52,7 +52,7 @@ public class UserEntity {
     @Column(name = "kakao_id")
     private Long kakaoIdx;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private PlayerEntity player;
 
