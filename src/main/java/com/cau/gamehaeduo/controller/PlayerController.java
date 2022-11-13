@@ -4,7 +4,6 @@ import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponse;
 import com.cau.gamehaeduo.domain.player.PlayerRequestDTO;
 import com.cau.gamehaeduo.domain.player.PlayerResponseDTO;
-import com.cau.gamehaeduo.domain.player.ProfileRequestDTO;
 import com.cau.gamehaeduo.domain.player.ProfileResponseDTO;
 import com.cau.gamehaeduo.service.JwtService;
 import com.cau.gamehaeduo.service.PlayerService;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/player")
@@ -30,10 +30,10 @@ public class PlayerController {
     }
 
     @GetMapping("/profile")
-    public BaseResponse<ProfileResponseDTO> getPlayerProfile(@RequestBody ProfileRequestDTO profileRequestDTO)
+    public BaseResponse<ProfileResponseDTO> getPlayerProfile(@RequestParam("id") int id)
             throws BaseException {
-        jwtService.validateAccessToken(profileRequestDTO.getUserIdx());
-        ProfileResponseDTO result = playerService.getPlayerProfile(profileRequestDTO);
+        jwtService.validateAccessToken(id);
+        ProfileResponseDTO result = playerService.getPlayerProfile(id);
         return new BaseResponse<>(result);
     }
 }
