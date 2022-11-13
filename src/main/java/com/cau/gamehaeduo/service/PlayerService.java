@@ -4,7 +4,6 @@ import com.cau.gamehaeduo.domain.player.PlayerEntity;
 import com.cau.gamehaeduo.domain.player.PlayerProfileResponseDTO;
 import com.cau.gamehaeduo.domain.player.PlayerRequestDTO;
 import com.cau.gamehaeduo.domain.player.PlayerResponseDTO;
-import com.cau.gamehaeduo.domain.player.ProfileRequestDTO;
 import com.cau.gamehaeduo.domain.player.ProfileResponseDTO;
 import com.cau.gamehaeduo.domain.user.UserEntity;
 import com.cau.gamehaeduo.repository.PlayerRepository;
@@ -40,8 +39,7 @@ public class PlayerService {
         return user;
     }
 
-    public ProfileResponseDTO getPlayerProfile(ProfileRequestDTO profileRequestDTO) {
-        int userIndex = profileRequestDTO.getUserIdx();
+    public ProfileResponseDTO getPlayerProfile(int userIndex) {
         UserEntity user = getUserEntity(userIndex);
 
         // Player 등록 안 한 경우
