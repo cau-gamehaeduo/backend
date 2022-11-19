@@ -36,4 +36,15 @@ public class PlayerController {
         ProfileResponseDTO result = playerService.getPlayerProfile(id);
         return new BaseResponse<>(result);
     }
+
+    @GetMapping("/profile")
+    public BaseResponse<ProfileResponseDTO> getOtherPlayerProfile(@RequestParam("userIdx") int userIdx, @RequestParam("playerIdx") int playerIdx) throws BaseException{
+        jwtService.validateAccessToken(userIdx);
+        try {
+            ProfileResponseDTO otherPlayerProfile = playerService.getOtherPlayerProfile(playerIdx);
+            return new BaseResponse<>(otherPlayerProfile);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }

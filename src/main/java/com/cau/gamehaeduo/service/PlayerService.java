@@ -1,5 +1,7 @@
 package com.cau.gamehaeduo.service;
 
+import com.cau.gamehaeduo.domain.base.BaseException;
+import com.cau.gamehaeduo.domain.base.BaseResponseStatus;
 import com.cau.gamehaeduo.domain.player.PlayerEntity;
 import com.cau.gamehaeduo.domain.player.PlayerProfileResponseDTO;
 import com.cau.gamehaeduo.domain.player.PlayerRequestDTO;
@@ -73,5 +75,26 @@ public class PlayerService {
 
     public boolean isPlayer(int userIndex) {
         return playerRepository.existsById(userIndex);
+    }
+
+    public PlayerProfileResponseDTO getOtherPlayerProfile(int playerIdx) throws BaseException {
+        UserEntity otherUser = getUserEntity(playerIdx);
+        if(otherUser.getIsPlayer().equals("N")) {
+            throw new BaseException(BaseResponseStatus.PRIVATE_PLAYER_PROFILE);
+        }
+        PlayerEntity player = playerRepository.findById(playerIdx);
+        return new PlayerProfileResponseDTO(
+                true,
+                otherUser.getNickname(),
+                player.getTier(),
+                otherUser.getTop(),
+                otherUser.getJungle(),
+                otherUser.getMid(),
+                otherUser.getAd(),
+                otherUser.getSupporter(),
+                player.getPlayStyle(),
+                player.getIntroduction(),
+                otherUser.getRating()
+        );
     }
 }

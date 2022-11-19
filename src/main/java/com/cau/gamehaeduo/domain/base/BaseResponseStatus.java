@@ -32,8 +32,9 @@ public enum BaseResponseStatus {
     EXPIRED_REFRESH_KAKAO(false,2013,"만료된 Kakao Refresh 토큰입니다. 다시 로그인해주세요."),
 
     /**
-    *
+    * 4000 Player
     */
+    PRIVATE_PLAYER_PROFILE(false, 4000, "프로필이 공개되지 않은 유저입니다."),
 
 
     /**
