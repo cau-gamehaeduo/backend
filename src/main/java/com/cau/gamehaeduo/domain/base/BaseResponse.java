@@ -41,4 +41,6 @@ public class BaseResponse<T>{
         this.code = status.getCode();
         this.result = result;
     }
+
+
 }

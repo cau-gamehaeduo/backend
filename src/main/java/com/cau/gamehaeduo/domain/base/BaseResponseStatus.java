@@ -34,8 +34,10 @@ public enum BaseResponseStatus {
     /**
     * 4000 Player
     */
-    PRIVATE_PLAYER_PROFILE(false, 4000, "프로필이 공개되지 않은 유저입니다."),
 
+    PRIVATE_PLAYER_PROFILE(false, 4000, "프로필이 공개되지 않은 유저입니다."),
+    SIGNUP_EMPTY_USER_PROFILE(false, 4002, "사진이 없습니다."),
+    SIGNUP_INVALID_USER_PROFILE_PHOTO(false, 4002, "유효하지 않은 프로필 사진입니다."),
 
     /**
      * 5000 SignUP
@@ -44,6 +46,7 @@ public enum BaseResponseStatus {
     SIGNUP_EMPTY_USER_NICKNAME(false, 5001, "닉네임을 입력해주세요."),
     SIGNUP_INVALID_USER_NICKNAME(false, 5002, "닉네임은 영어 또는 한글과 숫자를 조합한 2-10 자리만 가능합니다."),
     SIGNUP_ALREADY_EXIST_NICKNAME(false, 5003, "이미 사용중인 닉네임입니다."),;
+
 
     private final boolean isSuccess;
     private final int code;

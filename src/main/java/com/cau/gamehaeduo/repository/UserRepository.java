@@ -106,8 +106,13 @@ public class UserRepository {
 
     }
 
-    public void registerPlayer(int userIndex) {
-        String userRegisterPlayerQuery = "update User set is_player='Y' where user_id=?";
-        this.jdbcTemplate.update(userRegisterPlayerQuery, userIndex);
+    //User 의 Player 상태 Y로 변경
+    public void registerPlayer(int userIndex, String profilePhotoUrl) {
+        String userRegisterPlayerQuery = "update User set is_player = ?, profile_photo_url = ? where user_id = ?";
+        Object[] params = new Object[]{
+                "Y",profilePhotoUrl,userIndex
+        };
+
+        this.jdbcTemplate.update(userRegisterPlayerQuery,params);
     }
 }

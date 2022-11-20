@@ -23,8 +23,8 @@ public class JwtService {
 
     private final RedisService redisService;
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 2;  // 2일
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 21;  // 21일
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 2;  // 30일 (개발 단계) -> 최종 2일 변경 예정
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 21;  // 30일 (개발 단계) -> 최종 2일 변경 예정
     private final Key key;
 
     @Autowired

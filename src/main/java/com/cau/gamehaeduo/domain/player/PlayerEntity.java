@@ -12,6 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+
+import java.sql.Timestamp;
 
 @Table(name="Player")
 @Entity(name="Player")
@@ -19,6 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@DynamicInsert
 public class PlayerEntity {
     @Id
     @Column(columnDefinition = "INT UNSIGNED", name = "player_id")
@@ -45,4 +49,9 @@ public class PlayerEntity {
     @OneToOne(mappedBy = "player")
     @JoinColumn(name="user_id")
     private UserEntity user;
+
+
+    @Column(name="registered_at")
+    private Timestamp registeredAt;
+
 }
