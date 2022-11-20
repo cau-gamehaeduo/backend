@@ -10,9 +10,12 @@ import com.cau.gamehaeduo.domain.player.ProfileResponseDTO;
 import com.cau.gamehaeduo.domain.user.UserEntity;
 import com.cau.gamehaeduo.repository.PlayerRepository;
 import com.cau.gamehaeduo.repository.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,20 +60,7 @@ public class PlayerService {
         }
 
         PlayerEntity player = playerRepository.findById(userIndex);
-        return new PlayerProfileResponseDTO(
-                true,
-                user.getNickname(),
-                player.getTier(),
-                user.getTop(),
-                user.getJungle(),
-                user.getMid(),
-                user.getAd(),
-                user.getSupporter(),
-                player.getPlayStyle(),
-                player.getIntroduction(),
-                user.getRating()
-        );
-
+        return new PlayerProfileResponseDTO(user, player);
     }
 
     public boolean isPlayer(int userIndex) {
@@ -83,18 +73,15 @@ public class PlayerService {
             throw new BaseException(BaseResponseStatus.PRIVATE_PLAYER_PROFILE);
         }
         PlayerEntity player = playerRepository.findById(playerIdx);
-        return new PlayerProfileResponseDTO(
-                true,
-                otherUser.getNickname(),
-                player.getTier(),
-                otherUser.getTop(),
-                otherUser.getJungle(),
-                otherUser.getMid(),
-                otherUser.getAd(),
-                otherUser.getSupporter(),
-                player.getPlayStyle(),
-                player.getIntroduction(),
-                otherUser.getRating()
-        );
+        return new PlayerProfileResponseDTO(otherUser, player);
+    }
+
+    public List<PlayerProfileResponseDTO> getAllPlayer(final Pageable pageable) {
+        Page<PlayerEntity> players = playerRepository.findAll(pageable);  // 10개
+        List<PlayerProfileResponseDTO> playerProfiles = new ArrayList<>();
+        for(PlayerEntity player : players) {
+            playerProfiles.add(new PlayerProfileResponseDTO(player.getUser(), player));
+        }
+        return playerProfiles;
     }
 }
