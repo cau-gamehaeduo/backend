@@ -3,6 +3,7 @@ package com.cau.gamehaeduo.controller;
 import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponse;
 import com.cau.gamehaeduo.domain.player.PlayerListDTO;
+import com.cau.gamehaeduo.domain.player.PlayerProfileResponseDTO;
 import com.cau.gamehaeduo.domain.player.PlayerRequestDTO;
 import com.cau.gamehaeduo.domain.player.PlayerResponseDTO;
 import com.cau.gamehaeduo.domain.player.ProfileResponseDTO;
@@ -39,11 +40,17 @@ public class PlayerController {
         return new BaseResponse<>(result);
     }
 
-
+    @GetMapping("/profile")
+    public BaseResponse<PlayerProfileResponseDTO> getOtherPlayerProfile(@RequestParam("userIdx") int userIdx,
+                                                                        @RequestParam("otherIdx") int otherIdx) throws BaseException{
+        jwtService.validateAccessToken(userIdx);
+        PlayerProfileResponseDTO result = playerService.getOtherPlayerProfile(otherIdx);
+        return new BaseResponse<>(result);
+    }
 
     //세로로 pageable 플레이어 조회 (현재 정렬기준 : 최신 등록순)
     @GetMapping("/profiles/column")
-    public BaseResponse<PlayerListDTO> getHomeColumnProfiles(@RequestParam int userIdx, Pageable pageable) throws BaseException{
+    public BaseResponse<PlayerListDTO> getHomeColumnProfiles(@RequestParam int userIdx, Pageable pageable){
         try{
             jwtService.validateAccessToken(userIdx);
             return new BaseResponse<>(playerService.getRecentRegisteredPlayers(pageable));
@@ -55,7 +62,7 @@ public class PlayerController {
     }
 
     @GetMapping("/profiles/row")
-    public BaseResponse<PlayerListDTO> getHomeRowProfiles(@RequestParam int userIdx) throws BaseException{
+    public BaseResponse<PlayerListDTO> getHomeRowProfiles(@RequestParam int userIdx){
         try{
             jwtService.validateAccessToken(userIdx);
             return new BaseResponse<>(playerService.getHighRatingPlayers());
@@ -63,11 +70,5 @@ public class PlayerController {
             log.error(" API : GET api/player/profiles/row" +"\n Message : " + exception.getMessage() +"\n Cause : " + exception.getCause());
             return new BaseResponse<>(exception.getStatus());
         }
-
     }
-
-
-
-
 }
-
