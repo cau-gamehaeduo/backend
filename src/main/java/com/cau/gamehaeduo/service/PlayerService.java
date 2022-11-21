@@ -58,7 +58,8 @@ public class PlayerService {
 
         playerRepository.save(playerEntity);
         return new PlayerResponseDTO(true,
-                "플레이어가 등록되었습니다.");
+                "플레이어가 등록되었습니다.",
+                profilePhotoUrl);
     }
 
     // userIdx로 UserEntity 객체 가져오는 함수

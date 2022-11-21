@@ -12,4 +12,5 @@ import lombok.Setter;
 public class PlayerResponseDTO {
     private boolean isCreated;
     private String resultMessage;
+    private String profile_photo_url;
 }
