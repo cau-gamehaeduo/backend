@@ -25,6 +25,7 @@ public class PlayerController {
     private final PlayerService playerService;
     private final JwtService jwtService;
 
+    //Player 등록
     @PostMapping
     public BaseResponse<PlayerResponseDTO> registerPlayer(@RequestPart MultipartFile mFile, @Valid @RequestPart PlayerRequestDTO playerDto) throws BaseException {
         jwtService.validateAccessToken(playerDto.getUserIdx());
@@ -32,7 +33,7 @@ public class PlayerController {
         return new BaseResponse<>(result);
     }
 
-    //player 등록
+    //player 프로필 가져오기
     @GetMapping("/profile")
     public BaseResponse<ProfileResponseDTO> getPlayerProfile(@RequestParam("id") int id)
             throws BaseException {
