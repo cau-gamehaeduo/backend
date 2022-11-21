@@ -1,6 +1,5 @@
 package com.cau.gamehaeduo.service;
 
-import com.amazonaws.services.ec2.util.S3UploadPolicy;
 import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponseStatus;
 import com.cau.gamehaeduo.domain.player.*;
@@ -69,7 +68,7 @@ public class PlayerService {
         return user;
     }
 
-    public ProfileResponseDTO getPlayerProfile(int userIndex) {
+    public ProfileResponseDTO getUserPlayerProfile(int userIndex) {
         UserEntity user = getUserEntity(userIndex);
 
         // Player 등록 안 한 경우
@@ -99,6 +98,13 @@ public class PlayerService {
         }
         PlayerEntity player = playerRepository.findById(playerIdx);
         return new PlayerProfileResponseDTO(otherUser, player);
+    }
+
+    public ProfileResponseDTO getPlayerProfile(int userIdx, Integer otherIdx) throws BaseException {
+        if(otherIdx == null) {
+            return getUserPlayerProfile(userIdx);
+        }
+        return getOtherPlayerProfile(otherIdx);
     }
 
     public List<PlayerProfileResponseDTO> getAllPlayer(final Pageable pageable) {
