@@ -12,9 +12,11 @@ public class PlayerProfileResponseDTO extends ProfileResponseDTO{
     private String playStyle;
     private String introduction;
     private float rating;
+    private String profilePhotoUrl;
 
     public PlayerProfileResponseDTO(UserEntity user, PlayerEntity player) {
         super(user.getIsPlayer().equals("Y"), user.getTop(), user.getJungle(), user.getMid(), user.getAd(), user.getSupporter());
+        this.profilePhotoUrl = user.getProfilePhotoUrl();
         this.nickname = user.getNickname();
         this.tier = player.getTier();
         this.playStyle = player.getPlayStyle();
