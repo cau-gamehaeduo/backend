@@ -34,7 +34,7 @@ public class PlayerService {
 
 
 
-        String profilePhotoUrl = null;
+        String profilePhotoUrl;
         // 사용자 프로필 url 생성
         if(mFile.isEmpty()){
             throw new BaseException(SIGNUP_EMPTY_USER_PROFILE);
@@ -105,15 +105,6 @@ public class PlayerService {
             return getUserPlayerProfile(userIdx);
         }
         return getOtherPlayerProfile(otherIdx);
-    }
-
-    public List<PlayerProfileResponseDTO> getAllPlayer(final Pageable pageable) {
-        Page<PlayerEntity> players = playerRepository.findAll(pageable);  // 10개
-        List<PlayerProfileResponseDTO> playerProfiles = new ArrayList<>();
-        for(PlayerEntity player : players) {
-            playerProfiles.add(new PlayerProfileResponseDTO(player.getUser(), player));
-        }
-        return playerProfiles;
     }
 
     //최근 등록한 플레이어 불러오기
