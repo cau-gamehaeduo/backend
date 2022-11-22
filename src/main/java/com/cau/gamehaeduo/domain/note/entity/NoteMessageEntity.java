@@ -18,11 +18,11 @@ public class NoteMessageEntity {
     @Column(columnDefinition = "INT UNSIGNED", name ="message_id")
     private Long messageId;
 
-    @Column(columnDefinition = "INT UNSIGNED", name ="note_room_id")
-    private Long noteRoomId;
+//    @Column(columnDefinition = "INT UNSIGNED", name ="note_room_id")
+//    private Long noteRoomId;
 
 
-    @Column(columnDefinition = "INT UNSIGNED", name ="note_room_id")
+    @Column(columnDefinition = "INT UNSIGNED", name ="note_message")
     private String noteMessage;
 
     @Column(columnDefinition = "INT UNSIGNED",name="sender_id")

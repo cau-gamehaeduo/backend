@@ -1,9 +1,18 @@
 package com.cau.gamehaeduo.domain.note.entity;
 
-import com.cau.gamehaeduo.domain.user.UserEntity;
-import lombok.*;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Table(name="NoteParticipant")
 @Entity(name="NoteParticipant")
@@ -25,7 +34,7 @@ public class NoteParticipantEntity {
 
 
     @ManyToOne
-    @JoinColumn(name= "note_room_id")
+    @PrimaryKeyJoinColumn
     private NoteRoomEntity noteRoom ;
 
 
