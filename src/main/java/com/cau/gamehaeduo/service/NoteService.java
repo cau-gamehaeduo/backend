@@ -7,23 +7,18 @@ import com.cau.gamehaeduo.domain.note.entity.NoteMessageEntity;
 import com.cau.gamehaeduo.repository.NoteMessageRepository;
 import com.cau.gamehaeduo.repository.NoteParticipantRepository;
 import com.cau.gamehaeduo.repository.NoteRoomRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @Log4j2
+@Service
+@RequiredArgsConstructor
 public class NoteService {
     private final NoteRoomRepository noteRoomRepository;
     private final NoteParticipantRepository noteParticipantRepository;
     private final NoteMessageRepository noteMessageRepository;
-
-    public NoteService(NoteRoomRepository noteRoomRepository, NoteParticipantRepository noteParticipantRepository, NoteMessageRepository noteMessageRepository) {
-        this.noteRoomRepository = noteRoomRepository;
-        this.noteParticipantRepository = noteParticipantRepository;
-        this.noteMessageRepository = noteMessageRepository;
-    }
-
 
     //쪽지 저장
     @Transactional
