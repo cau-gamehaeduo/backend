@@ -2,8 +2,10 @@ package com.cau.gamehaeduo.domain.note.entity;
 
 
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Table(name="NoteMessage")
 @Entity(name="NoteMessage")
@@ -11,6 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@DynamicInsert
 public class NoteMessageEntity {
 
     @Id
@@ -27,6 +30,12 @@ public class NoteMessageEntity {
 
     @Column(columnDefinition = "INT UNSIGNED",name="sender_id")
     private Long senderId;
+
+    @Column(columnDefinition = "INT UNSIGNED",name="receiver_id")
+    private Long receiverId;
+
+    @Column(name="sent_at")
+    private Timestamp sentAt;
 
     @ManyToOne
     @JoinColumn(name= "note_room_id")
