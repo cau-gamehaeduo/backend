@@ -3,25 +3,38 @@ package com.cau.gamehaeduo.service;
 import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponseStatus;
 import com.cau.gamehaeduo.domain.note.SendFirstNoteReqDTO;
+import com.cau.gamehaeduo.domain.note.SendFirstNoteResDTO;
 import com.cau.gamehaeduo.domain.note.SendNoteReqDTO;
+import com.cau.gamehaeduo.domain.note.SendNoteResDTO;
 import com.cau.gamehaeduo.domain.note.entity.NoteMessageEntity;
+import com.cau.gamehaeduo.domain.note.entity.NoteParticipantEntity;
 import com.cau.gamehaeduo.domain.note.entity.NoteRoomEntity;
+import com.cau.gamehaeduo.domain.user.UserEntity;
 import com.cau.gamehaeduo.repository.NoteMessageRepository;
 import com.cau.gamehaeduo.repository.NoteParticipantRepository;
 import com.cau.gamehaeduo.repository.NoteRoomRepository;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
+import com.cau.gamehaeduo.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Log4j2
+import java.util.List;
+
 @Service
-@RequiredArgsConstructor
+@Log4j2
 public class NoteService {
     private final NoteRoomRepository noteRoomRepository;
     private final NoteParticipantRepository noteParticipantRepository;
     private final NoteMessageRepository noteMessageRepository;
+    private final UserRepository userRepository;
+
+    public NoteService(NoteRoomRepository noteRoomRepository, NoteParticipantRepository noteParticipantRepository, NoteMessageRepository noteMessageRepository, UserRepository userRepository) {
+        this.noteRoomRepository = noteRoomRepository;
+        this.noteParticipantRepository = noteParticipantRepository;
+        this.noteMessageRepository = noteMessageRepository;
+        this.userRepository = userRepository;
+    }
+
 
     public List<NoteMessageEntity> getRoomMessages(Long roomId) throws BaseException {
         NoteRoomEntity noteRoom = noteRoomRepository.findById(roomId)
@@ -30,24 +43,110 @@ public class NoteService {
         return noteMessages;
     }
 
-    //쪽지 저장
-    @Transactional
-    public void sendNote(SendNoteReqDTO sendNoteReqDTO) throws BaseException {
-        NoteMessageEntity noteMessageEntity = NoteMessageEntity.builder().
-    }
+    //이미 쪽지 한적 있는 상대방에게 쪽지 전송
+    public SendNoteResDTO sendNote(SendNoteReqDTO sendNoteReqDTO) throws BaseException{
 
+        //UserEntity 가져오기
+        UserEntity sendUser = getUserEntity(sendNoteReqDTO.getSenderIdx().intValue());
+        UserEntity receiveUser = getUserEntity(sendNoteReqDTO.getReceiverIdx().intValue());
 
-    public void sendFirstNote(SendFirstNoteReqDTO sendFirstNoteReqDTO) throws BaseException{
+        NoteRoomEntity noteRoom = noteRoomRepository.getReferenceById(sendNoteReqDTO.getNoteRoomIdx());
+        //쪽지 저장
         NoteMessageEntity noteMessage = NoteMessageEntity.builder()
-                .noteMessage(sendFirstNoteReqDTO.getNoteMessage())
-                .senderId(sendFirstNoteReqDTO.getSenderIdx())
-                .receiverId(sendFirstNoteReqDTO.getReceiverIdx()).build();
+                .noteMessage(sendNoteReqDTO.getNoteMessage())
+                .senderId(sendUser)
+                .receiverId(receiveUser)
+                .noteRoom(noteRoomRepository.getReferenceById(sendNoteReqDTO.getNoteRoomIdx()))
+                .build();
 
         noteMessageRepository.save(noteMessage);
 
 
+        //쪽지 참가자 저장   쪽지 신청한 사람은 isNotePlayer 0 쪽지 받는 플레이너는 isNotePlayer 1
+        NoteParticipantEntity noteSenderParticipantEntity = NoteParticipantEntity.builder()
+                .isNotePlayer(0)
+                .noteRoom(
+                        noteRoomRepository.getReferenceById(noteRoom.getNoteRoomId())
+                )
+                .noteParticipantId(
+                        sendUser
+                )
+                .build();
+
+        NoteParticipantEntity noteReceiverParticipantEntity = NoteParticipantEntity.builder()
+                .isNotePlayer(1)
+                .noteRoom(
+                        noteRoomRepository.getReferenceById(noteRoom.getNoteRoomId())
+                )
+                .noteParticipantId(
+                        receiveUser
+                )
+                .build();
+
+        noteParticipantRepository.save(noteSenderParticipantEntity);
+        noteParticipantRepository.save(noteReceiverParticipantEntity);
+
+
+        return new SendNoteResDTO(true,"상대방에게  쪽지가 전송되었습니다.", noteRoom.getNoteRoomId());
     }
 
 
-    //기존 쪽지방에 메세지 저장
+    //쪽지 처음 전송
+    //새 채팅방 생성후 그 채팅방에 저장
+    public SendFirstNoteResDTO sendFirstNote(SendFirstNoteReqDTO sendFirstNoteReqDTO) throws BaseException{
+        NoteRoomEntity noteRoom = NoteRoomEntity.builder().build();
+
+        //새 쪽지방 생성
+        Long noteRoomIdx = noteRoomRepository.save(noteRoom).getNoteRoomId();
+
+
+        //UserEntity 가져오기
+        UserEntity sendUser = getUserEntity(sendFirstNoteReqDTO.getSenderIdx().intValue());
+        UserEntity receiveUser = getUserEntity(sendFirstNoteReqDTO.getReceiverIdx().intValue());
+
+        //쪽지 저장
+        NoteMessageEntity noteMessage = NoteMessageEntity.builder()
+                .noteMessage(sendFirstNoteReqDTO.getNoteMessage())
+                .senderId(sendUser)
+                .receiverId(receiveUser)
+                .noteRoom(noteRoomRepository.getReferenceById(noteRoomIdx))
+                .build();
+
+        noteMessageRepository.save(noteMessage);
+
+
+        //쪽지 참가자 저장   쪽지 신청한 사람은 isNotePlayer 0 쪽지 받는 플레이너는 isNotePlayer 1
+        NoteParticipantEntity noteSenderParticipantEntity = NoteParticipantEntity.builder()
+                .isNotePlayer(0)
+                .noteRoom(
+                        noteRoomRepository.getReferenceById(noteRoomIdx)
+                )
+                .noteParticipantId(
+                        sendUser
+                )
+                .build();
+
+        NoteParticipantEntity noteReceiverParticipantEntity = NoteParticipantEntity.builder()
+                .isNotePlayer(1)
+                .noteRoom(
+                        noteRoomRepository.getReferenceById(noteRoomIdx)
+                )
+                .noteParticipantId(
+                        receiveUser
+                )
+                .build();
+
+        noteParticipantRepository.save(noteSenderParticipantEntity);
+        noteParticipantRepository.save(noteReceiverParticipantEntity);
+
+
+        return new SendFirstNoteResDTO(true,"상대방에게 첫 쪽지가 전송되었습니다.", noteRoomIdx);
+
+    }
+
+    private UserEntity getUserEntity(int userIdx) {
+        List<UserEntity> userList = userRepository.selectByUserId(userIdx);
+        UserEntity user = userList.get(0);
+        return user;
+    }
 }
