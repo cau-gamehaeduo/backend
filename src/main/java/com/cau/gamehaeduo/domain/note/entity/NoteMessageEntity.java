@@ -25,11 +25,11 @@ public class NoteMessageEntity {
     @Column(columnDefinition = "INT UNSIGNED", name ="note_message")
     private String noteMessage;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="sender_id")
     private UserEntity senderId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="receiver_id")
     private UserEntity receiverId;
 
