@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -16,7 +18,8 @@ public class DuoService {
     private final PlayerRepository playerRepository;
 
     public List<PlayerProfileResponseDTO> getAllPlayer(final Pageable pageable) {
-        Page<PlayerEntity> players = playerRepository.findAll(pageable);  // 10개
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("registeredAt").descending());
+        Page<PlayerEntity> players = playerRepository.findAll(sortedPageable);  // 10개
         List<PlayerProfileResponseDTO> playerProfiles = new ArrayList<>();
         for(PlayerEntity player : players) {
             playerProfiles.add(new PlayerProfileResponseDTO(player.getUser(), player));
