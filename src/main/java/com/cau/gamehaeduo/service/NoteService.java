@@ -1,12 +1,15 @@
 package com.cau.gamehaeduo.service;
 
 import com.cau.gamehaeduo.domain.base.BaseException;
+import com.cau.gamehaeduo.domain.base.BaseResponseStatus;
 import com.cau.gamehaeduo.domain.note.SendFirstNoteReqDTO;
 import com.cau.gamehaeduo.domain.note.SendNoteReqDTO;
 import com.cau.gamehaeduo.domain.note.entity.NoteMessageEntity;
+import com.cau.gamehaeduo.domain.note.entity.NoteRoomEntity;
 import com.cau.gamehaeduo.repository.NoteMessageRepository;
 import com.cau.gamehaeduo.repository.NoteParticipantRepository;
 import com.cau.gamehaeduo.repository.NoteRoomRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,13 @@ public class NoteService {
     private final NoteRoomRepository noteRoomRepository;
     private final NoteParticipantRepository noteParticipantRepository;
     private final NoteMessageRepository noteMessageRepository;
+
+    public List<NoteMessageEntity> getRoomMessages(Long roomId) throws BaseException {
+        NoteRoomEntity noteRoom = noteRoomRepository.findById(roomId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXIST_NOTE_ROOM));
+        List<NoteMessageEntity> noteMessages = noteMessageRepository.findByNoteRoom(noteRoom);
+        return noteMessages;
+    }
 
     //쪽지 저장
     @Transactional
