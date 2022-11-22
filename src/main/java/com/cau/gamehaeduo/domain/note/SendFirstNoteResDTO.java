@@ -10,9 +10,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SendNoteReqDTO {
-    private Long noteRoomIdx;
+public class SendFirstNoteResDTO {
     private String noteMessage;
     private String senderIdx;
-    private String receiverIdx;
+    private String noteRoomIdx;
 }
