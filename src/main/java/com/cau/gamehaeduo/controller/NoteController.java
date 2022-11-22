@@ -31,7 +31,7 @@ public class NoteController {
     @PostMapping("/note/send")
     public BaseResponse<SendNoteResDTO> sendNote(@RequestBody SendNoteReqDTO sendNoteReqDTO){
         try{
-            //  jwtService.validateAccessToken(sendNoteReqDTO.getSenderIdx().intValue());
+            jwtService.validateAccessToken(sendNoteReqDTO.getSenderIdx().intValue());
             return new BaseResponse<>(noteService.sendNote(sendNoteReqDTO));
         }catch(BaseException e){
             log.error(" API : api/note/send" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
@@ -43,7 +43,7 @@ public class NoteController {
     @PostMapping("/note/send/new")
     public BaseResponse<SendFirstNoteResDTO> sendFirstNote(@RequestBody SendFirstNoteReqDTO sendFirstNoteReqDTO){
         try{
-            //jwtService.validateAccessToken(sendFirstNoteReqDTO.getSenderIdx().intValue());
+            jwtService.validateAccessToken(sendFirstNoteReqDTO.getSenderIdx().intValue());
             return new BaseResponse<>(noteService.sendFirstNote(sendFirstNoteReqDTO));
         }catch(BaseException e){
             log.error(" API : api/note/send/new" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
