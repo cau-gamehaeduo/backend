@@ -1,6 +1,5 @@
 package com.cau.gamehaeduo.service;
 
-import com.amazonaws.services.ec2.util.S3UploadPolicy;
 import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponseStatus;
 import com.cau.gamehaeduo.domain.player.*;
@@ -35,7 +34,7 @@ public class PlayerService {
 
 
 
-        String profilePhotoUrl = null;
+        String profilePhotoUrl;
         // 사용자 프로필 url 생성
         if(mFile.isEmpty()){
             throw new BaseException(SIGNUP_EMPTY_USER_PROFILE);
@@ -69,7 +68,7 @@ public class PlayerService {
         return user;
     }
 
-    public ProfileResponseDTO getPlayerProfile(int userIndex) {
+    public ProfileResponseDTO getUserPlayerProfile(int userIndex) {
         UserEntity user = getUserEntity(userIndex);
 
         // Player 등록 안 한 경우
@@ -101,13 +100,11 @@ public class PlayerService {
         return new PlayerProfileResponseDTO(otherUser, player);
     }
 
-    public List<PlayerProfileResponseDTO> getAllPlayer(final Pageable pageable) {
-        Page<PlayerEntity> players = playerRepository.findAll(pageable);  // 10개
-        List<PlayerProfileResponseDTO> playerProfiles = new ArrayList<>();
-        for(PlayerEntity player : players) {
-            playerProfiles.add(new PlayerProfileResponseDTO(player.getUser(), player));
+    public ProfileResponseDTO getPlayerProfile(int userIdx, Integer otherIdx) throws BaseException {
+        if(otherIdx == null) {
+            return getUserPlayerProfile(userIdx);
         }
-        return playerProfiles;
+        return getOtherPlayerProfile(otherIdx);
     }
 
     //최근 등록한 플레이어 불러오기
