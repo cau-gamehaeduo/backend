@@ -1,5 +1,6 @@
 package com.cau.gamehaeduo.domain.note;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomMessageResponseDTO {
-    private Long messageId;
-    private String noteMessage;
-    private Long senderId;
+    private List<MessageContentDTO> message;
 }
