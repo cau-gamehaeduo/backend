@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,7 @@ public class PlayerController {
     private final JwtService jwtService;
 
     //Player 등록
-    @PostMapping
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public BaseResponse<PlayerResponseDTO> registerPlayer(@RequestPart MultipartFile mFile, @Valid @RequestPart PlayerRequestDTO playerDto) throws BaseException {
         jwtService.validateAccessToken(playerDto.getUserIdx());
         PlayerResponseDTO result = playerService.registerPlayer(mFile, playerDto);
