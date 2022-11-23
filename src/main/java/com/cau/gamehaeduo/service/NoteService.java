@@ -19,6 +19,7 @@ import com.cau.gamehaeduo.repository.NoteRoomRepository;
 import com.cau.gamehaeduo.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -162,5 +163,16 @@ public class NoteService {
         List<UserEntity> userList = userRepository.selectByUserId(userIdx);
         UserEntity user = userList.get(0);
         return user;
+    }
+
+    public List<Long> getUserRooms(int userIdx) {
+        UserEntity user = userRepository.selectByUserId(userIdx).get(0);
+        List<Long> rooms = noteParticipantRepository.findByNoteParticipantId(user).stream()
+                .map(NoteParticipantEntity::getNoteRoom)
+                .map(NoteRoomEntity::getNoteRoomId)
+                .distinct()
+                .collect(Collectors.toList());
+
+        return rooms;
     }
 }

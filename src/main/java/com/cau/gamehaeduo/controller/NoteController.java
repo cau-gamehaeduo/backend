@@ -10,6 +10,7 @@ import com.cau.gamehaeduo.domain.note.SendNoteReqDTO;
 import com.cau.gamehaeduo.domain.note.SendNoteResDTO;
 import com.cau.gamehaeduo.service.JwtService;
 import com.cau.gamehaeduo.service.NoteService;
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +40,11 @@ public class NoteController {
             log.error(" API : api/note/send" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
             return new BaseResponse<>(e.getStatus());
         }
+    }
+
+    @GetMapping("/room")
+    public BaseResponse<List<Long>> getUserRooms(@RequestParam("userIdx") int id) {
+        return new BaseResponse<>(noteService.getUserRooms(id));
     }
 
     //처음 쪽지 보낼때 호출 API
