@@ -2,6 +2,9 @@ package com.cau.gamehaeduo.service;
 
 import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponseStatus;
+import com.cau.gamehaeduo.domain.note.MessageContentDTO;
+import com.cau.gamehaeduo.domain.note.MessageContentMapping;
+import com.cau.gamehaeduo.domain.note.RoomMessageResponseDTO;
 import com.cau.gamehaeduo.domain.note.SendFirstNoteReqDTO;
 import com.cau.gamehaeduo.domain.note.SendFirstNoteResDTO;
 import com.cau.gamehaeduo.domain.note.SendNoteReqDTO;
@@ -14,11 +17,10 @@ import com.cau.gamehaeduo.repository.NoteMessageRepository;
 import com.cau.gamehaeduo.repository.NoteParticipantRepository;
 import com.cau.gamehaeduo.repository.NoteRoomRepository;
 import com.cau.gamehaeduo.repository.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Log4j2
@@ -36,11 +38,23 @@ public class NoteService {
     }
 
 
-    public List<NoteMessageEntity> getRoomMessages(Long roomId) throws BaseException {
+    public RoomMessageResponseDTO getRoomMessages(Long roomId) throws BaseException {
         NoteRoomEntity noteRoom = noteRoomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXIST_NOTE_ROOM));
-        List<NoteMessageEntity> noteMessages = noteMessageRepository.findByNoteRoom(noteRoom);
-        return noteMessages;
+        List<MessageContentMapping> noteMessages = noteMessageRepository.findByNoteRoom(noteRoom);
+        List<MessageContentDTO> messageContents = new ArrayList<>();
+        for(MessageContentMapping messageContent: noteMessages) {
+            messageContents.add(
+                    MessageContentDTO.builder()
+                            .messageId(messageContent.getMessageId())
+                            .senderId(messageContent.getSenderId().getUserIdx())
+                            .receiverId(messageContent.getReceiverId().getUserIdx())
+                            .sendAt(messageContent.getSentAt())
+                            .noteMessage(messageContent.getNoteMessage())
+                            .build()
+            );
+        }
+        return new RoomMessageResponseDTO(messageContents);
     }
 
     //이미 쪽지 한적 있는 상대방에게 쪽지 전송
