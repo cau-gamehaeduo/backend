@@ -13,6 +13,7 @@ public class PlayerProfileResponseDTO extends ProfileResponseDTO{
     private String introduction;
     private float rating;
     private String profilePhotoUrl;
+    private int price;
 
     public PlayerProfileResponseDTO(UserEntity user, PlayerEntity player) {
         super(user.getIsPlayer().equals("Y"), user.getTop(), user.getJungle(), user.getMid(), user.getAd(), user.getSupporter());
@@ -22,5 +23,6 @@ public class PlayerProfileResponseDTO extends ProfileResponseDTO{
         this.playStyle = player.getPlayStyle();
         this.introduction = player.getIntroduction();
         this.rating = user.getRating();
+        this.price = player.getPrice();
     }
 }
