@@ -8,13 +8,13 @@ import org.hibernate.annotations.DynamicInsert;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+@DynamicInsert
 @Table(name="NoteMessage")
 @Entity(name="NoteMessage")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@DynamicInsert
 public class NoteMessageEntity {
 
     @Id

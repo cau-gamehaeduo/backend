@@ -11,7 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SendFirstNoteResDTO {
-    private String noteMessage;
-    private String senderIdx;
-    private String noteRoomIdx;
+    private Boolean isCreated;
+    private String resultMessage;
+
+    private Long noteRoomIdx;
 }

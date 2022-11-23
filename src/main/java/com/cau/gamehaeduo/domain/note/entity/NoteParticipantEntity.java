@@ -1,19 +1,16 @@
 package com.cau.gamehaeduo.domain.note.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import com.cau.gamehaeduo.domain.user.UserEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
+@DynamicInsert
 @Table(name="NoteParticipant")
 @Entity(name="NoteParticipant")
 @Builder
@@ -21,21 +18,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class NoteParticipantEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "INT UNSIGNED", name ="note_room_id")
-    private Long noteRoomId;
-
-    @Column(columnDefinition = "INT UNSIGNED",name="note_participant_id")
-    private Long noteRoomName;
-
-    @Column(columnDefinition = "INT",name="is_note_player")
-    private int isNotePlayer;
+    @Column(columnDefinition = "INT UNSIGNED", name ="note_participant_column_id")
+    private Long noteParticipantColumnId;
 
 
     @ManyToOne
-    @PrimaryKeyJoinColumn
+    @JoinColumn(name ="note_participant_id")
+    private UserEntity noteParticipantId;
+
+
+    @ManyToOne
+    @JoinColumn (name ="note_room_id")
     private NoteRoomEntity noteRoom ;
 
+    @Column(columnDefinition = "INT",name="is_note_player")
+    private int isNotePlayer;
 
 }
