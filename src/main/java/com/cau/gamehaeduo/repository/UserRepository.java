@@ -115,4 +115,15 @@ public class UserRepository {
 
         this.jdbcTemplate.update(userRegisterPlayerQuery,params);
     }
+
+    public int updatePlayerState(boolean status, int userId) {
+        String changedState;
+        if(status) {
+            changedState = "Active";
+        } else {
+            changedState = "Inactive";
+        }
+        String updatePlayerStateQuery = "update User set status = ? where user_id = ?";
+        return this.jdbcTemplate.update(updatePlayerStateQuery, changedState, userId);
+    }
 }
