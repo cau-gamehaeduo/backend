@@ -31,9 +31,6 @@ public class PlayerService {
 
     @Transactional
     public PlayerResponseDTO registerPlayer(MultipartFile mFile, PlayerRequestDTO requestDto) throws BaseException {
-
-
-
         String profilePhotoUrl;
         // 사용자 프로필 url 생성
         if(mFile.isEmpty()){
@@ -135,5 +132,14 @@ public class PlayerService {
                     player.getTier(), player.getUser().getRating()));
         }
         return new PlayerListDTO(playerProfiles);
+    }
+
+    @Transactional
+    public boolean changePlayerState(int userId, boolean status) {
+        int resultCount = userRepository.updatePlayerState(status, userId);
+        if(resultCount == 1) {
+            return true;
+        }
+        return false;
     }
 }

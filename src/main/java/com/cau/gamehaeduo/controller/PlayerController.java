@@ -5,6 +5,7 @@ import com.cau.gamehaeduo.domain.base.BaseResponse;
 import com.cau.gamehaeduo.domain.player.PlayerListDTO;
 import com.cau.gamehaeduo.domain.player.PlayerRequestDTO;
 import com.cau.gamehaeduo.domain.player.PlayerResponseDTO;
+import com.cau.gamehaeduo.domain.player.PlayerStatusResponseDTO;
 import com.cau.gamehaeduo.domain.player.ProfileResponseDTO;
 import com.cau.gamehaeduo.service.JwtService;
 import com.cau.gamehaeduo.service.PlayerService;
@@ -73,5 +74,11 @@ public class PlayerController {
             log.error(" API : GET api/player/profiles/row" +"\n Message : " + exception.getMessage() +"\n Cause : " + exception.getCause());
             return new BaseResponse<>(exception.getStatus());
         }
+    }
+
+    @PostMapping("/status")
+    public BaseResponse<PlayerStatusResponseDTO> changePlayerState(@RequestParam("userIdx") int userId, @RequestParam("status") boolean state) {
+        boolean isChanged = playerService.changePlayerState(userId, state);
+        return new BaseResponse<>(new PlayerStatusResponseDTO(isChanged));
     }
 }
