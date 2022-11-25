@@ -109,10 +109,11 @@ public class PlayerService {
 
     //최근 등록한 플레이어 불러오기
     //(홈에서 세로 스크롤 호출시 사용)
-   public PlayerListDTO getRecentRegisteredPlayers(final Pageable pageable) {
+   public PlayerListDTO getRecentRegisteredPlayers(int userIdx, final Pageable pageable) {
         Page<PlayerEntity> players = playerRepository.findAllOrderBy_DateDesc(pageable);  // 10개
         List<HomePartnerDTO> playerProfiles = new ArrayList<>();
         for(PlayerEntity player : players) {
+            if(userIdx == player.getId()) continue;
             playerProfiles.add(new HomePartnerDTO(
                     player.getId(),player.getPrice(),
                     player.getUser().getNickname(),
@@ -123,11 +124,12 @@ public class PlayerService {
     }
 
     //평점 상위 10명 불러오기
-    public PlayerListDTO getHighRatingPlayers() {
+    public PlayerListDTO getHighRatingPlayers(int userIdx) {
         List<PlayerEntity> players = playerRepository.findTop10ByOrderByUserRatingDesc();
         List<HomePartnerDTO> playerProfiles = new ArrayList<>();
 
         for(PlayerEntity player : players) {
+            if(userIdx == player.getId()) continue;
             playerProfiles.add(new HomePartnerDTO(
                     player.getId(),player.getPrice(),
                     player.getUser().getNickname(),

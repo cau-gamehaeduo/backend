@@ -17,11 +17,12 @@ import org.springframework.stereotype.Service;
 public class DuoService {
     private final PlayerRepository playerRepository;
 
-    public List<PlayerProfileResponseDTO> getAllPlayer(final Pageable pageable) {
+    public List<PlayerProfileResponseDTO> getAllPlayer(int userIdx, final Pageable pageable) {
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("registeredAt").descending());
         Page<PlayerEntity> players = playerRepository.findAll(sortedPageable);  // 10개
         List<PlayerProfileResponseDTO> playerProfiles = new ArrayList<>();
         for(PlayerEntity player : players) {
+            if(userIdx == player.getId()) continue;
             playerProfiles.add(new PlayerProfileResponseDTO(player.getUser(), player));
         }
         return playerProfiles;

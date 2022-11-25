@@ -55,7 +55,7 @@ public class PlayerController {
     public BaseResponse<PlayerListDTO> getHomeColumnProfiles(@RequestParam int userIdx, Pageable pageable){
         try{
             jwtService.validateAccessToken(userIdx);
-            return new BaseResponse<>(playerService.getRecentRegisteredPlayers(pageable));
+            return new BaseResponse<>(playerService.getRecentRegisteredPlayers(userIdx, pageable));
         }catch (BaseException exception){
             log.error(" API : GET api/player/profiles/column" +"\n Message : " + exception.getMessage() +"\n Cause : " + exception.getCause());
             return new BaseResponse<>(exception.getStatus());
@@ -67,7 +67,7 @@ public class PlayerController {
     public BaseResponse<PlayerListDTO> getHomeRowProfiles(@RequestParam int userIdx){
         try{
             jwtService.validateAccessToken(userIdx);
-            return new BaseResponse<>(playerService.getHighRatingPlayers());
+            return new BaseResponse<>(playerService.getHighRatingPlayers(userIdx));
         }catch (BaseException exception){
             log.error(" API : GET api/player/profiles/row" +"\n Message : " + exception.getMessage() +"\n Cause : " + exception.getCause());
             return new BaseResponse<>(exception.getStatus());

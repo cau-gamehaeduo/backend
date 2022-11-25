@@ -26,7 +26,7 @@ public class DuoController {
     public BaseResponse<List<PlayerProfileResponseDTO>> getSearchDuo(@RequestParam("userIdx") int userIdx, Pageable pageable) {
         try {
             jwtService.validateAccessToken(userIdx);
-            return new BaseResponse<>(duoService.getAllPlayer(pageable));
+            return new BaseResponse<>(duoService.getAllPlayer(userIdx, pageable));
         } catch (BaseException exception) {
             log.error(" API : GET api/duo/search" +"\n Message : " + exception.getMessage() +"\n Cause : " + exception.getCause());
             return new BaseResponse<>(exception.getStatus());
