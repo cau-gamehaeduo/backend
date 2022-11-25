@@ -135,11 +135,9 @@ public class PlayerService {
     }
 
     @Transactional
-    public boolean changePlayerState(int userId, boolean status) {
-        int resultCount = userRepository.updatePlayerState(status, userId);
-        if(resultCount == 1) {
-            return true;
-        }
-        return false;
+    public void changePlayerState(int userId, boolean status) {
+        PlayerEntity player = playerRepository.findById(userId);
+        player.setStatus(status ? "A" : "I");
+        playerRepository.save(player);
     }
 }

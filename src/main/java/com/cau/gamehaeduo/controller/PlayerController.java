@@ -77,8 +77,8 @@ public class PlayerController {
     }
 
     @PostMapping("/status")
-    public BaseResponse<PlayerStatusResponseDTO> changePlayerState(@RequestParam("userIdx") int userId, @RequestParam("status") boolean state) {
-        boolean isChanged = playerService.changePlayerState(userId, state);
-        return new BaseResponse<>(new PlayerStatusResponseDTO(isChanged));
+    public BaseResponse<PlayerStatusResponseDTO> changePlayerState(@RequestParam("userIdx") int userId, @RequestParam("status") boolean status) {
+        playerService.changePlayerState(userId, status);
+        return new BaseResponse<>(new PlayerStatusResponseDTO(status));
     }
 }
