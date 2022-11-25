@@ -5,6 +5,7 @@ import com.cau.gamehaeduo.domain.base.BaseResponse;
 import com.cau.gamehaeduo.domain.player.PlayerListDTO;
 import com.cau.gamehaeduo.domain.player.PlayerRequestDTO;
 import com.cau.gamehaeduo.domain.player.PlayerResponseDTO;
+import com.cau.gamehaeduo.domain.player.PlayerStatusResponseDTO;
 import com.cau.gamehaeduo.domain.player.ProfileResponseDTO;
 import com.cau.gamehaeduo.service.JwtService;
 import com.cau.gamehaeduo.service.PlayerService;
@@ -31,7 +32,8 @@ public class PlayerController {
 
     //Player 등록
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public BaseResponse<PlayerResponseDTO> registerPlayer(@RequestPart MultipartFile mFile, @Valid @RequestPart PlayerRequestDTO playerDto) throws BaseException {
+    public BaseResponse<PlayerResponseDTO> registerPlayer(@RequestPart("mFile") MultipartFile mFile,
+                                                          @Valid @RequestPart("playerDto") PlayerRequestDTO playerDto) throws BaseException {
         jwtService.validateAccessToken(playerDto.getUserIdx());
         PlayerResponseDTO result = playerService.registerPlayer(mFile, playerDto);
         return new BaseResponse<>(result);
@@ -72,5 +74,11 @@ public class PlayerController {
             log.error(" API : GET api/player/profiles/row" +"\n Message : " + exception.getMessage() +"\n Cause : " + exception.getCause());
             return new BaseResponse<>(exception.getStatus());
         }
+    }
+
+    @PostMapping("/status")
+    public BaseResponse<PlayerStatusResponseDTO> changePlayerState(@RequestParam("userIdx") int userId, @RequestParam("status") boolean status) {
+        playerService.changePlayerState(userId, status);
+        return new BaseResponse<>(new PlayerStatusResponseDTO(status));
     }
 }

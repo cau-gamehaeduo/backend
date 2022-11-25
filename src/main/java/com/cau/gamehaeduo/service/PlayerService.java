@@ -123,19 +123,27 @@ public class PlayerService {
         return new PlayerListDTO(playerProfiles);
     }
 
+
     //평점 상위 10명 불러오기
     public PlayerListDTO getHighRatingPlayers(int userIdx) {
-        List<PlayerEntity> players = playerRepository.findTop10ByOrderByUserRatingDesc();
+        List<PlayerEntity> players = playerRepository.findTop10ByStatusEqualsOrderByUserRatingDesc("A");
         List<HomePartnerDTO> playerProfiles = new ArrayList<>();
 
-        for(PlayerEntity player : players) {
+        for (PlayerEntity player : players) {
             if(userIdx == player.getId()) continue;
             playerProfiles.add(new HomePartnerDTO(
-                    player.getId(),player.getPrice(),
+                    player.getId(), player.getPrice(),
                     player.getUser().getNickname(),
                     player.getUser().getProfilePhotoUrl(),
                     player.getTier(), player.getUser().getRating()));
         }
         return new PlayerListDTO(playerProfiles);
+    }
+
+    @Transactional
+    public void changePlayerState(int userId, boolean status) {
+        PlayerEntity player = playerRepository.findById(userId);
+        player.setStatus(status ? "A" : "I");
+        playerRepository.save(player);
     }
 }

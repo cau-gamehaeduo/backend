@@ -3,6 +3,7 @@ package com.cau.gamehaeduo.controller;
 
 import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponse;
+import com.cau.gamehaeduo.domain.note.MessageRoomsResponseDTO;
 import com.cau.gamehaeduo.domain.note.RoomMessageResponseDTO;
 import com.cau.gamehaeduo.domain.note.*;
 import com.cau.gamehaeduo.domain.player.ParticipatingNoteRoomAndUserDTOInterface;
@@ -74,8 +75,13 @@ public class NoteController {
     }
 
     @GetMapping("/room")
-    public BaseResponse<List<Long>> getUserRooms(@RequestParam("userIdx") int id) {
-        return new BaseResponse<>(noteService.getUserRooms(id));
+    public BaseResponse<List<MessageRoomsResponseDTO>> getUserRooms(@RequestParam("userIdx") int id) {
+        try {
+            return new BaseResponse<>(noteService.getUserRooms(id));
+        } catch (BaseException e) {
+            log.error(" API : api/room" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 //
 //    //처음 쪽지 보낼때 호출 API

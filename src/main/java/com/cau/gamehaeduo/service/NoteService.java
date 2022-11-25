@@ -4,6 +4,7 @@ import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponseStatus;
 import com.cau.gamehaeduo.domain.note.MessageContentDTO;
 import com.cau.gamehaeduo.domain.note.MessageContentMapping;
+import com.cau.gamehaeduo.domain.note.MessageRoomsResponseDTO;
 import com.cau.gamehaeduo.domain.note.RoomMessageResponseDTO;
 import com.cau.gamehaeduo.domain.note.*;
 import com.cau.gamehaeduo.domain.note.entity.NoteMessageEntity;
@@ -17,6 +18,7 @@ import com.cau.gamehaeduo.repository.NoteRoomRepository;
 import com.cau.gamehaeduo.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -175,14 +177,33 @@ public class NoteService {
         return user;
     }
 
-    public List<Long> getUserRooms(int userIdx) {
+    public List<MessageRoomsResponseDTO> getUserRooms(int userIdx) throws BaseException {
         UserEntity user = userRepository.selectByUserId(userIdx).get(0);
         List<Long> rooms = noteParticipantRepository.findByNoteParticipantId(user).stream()
                 .map(NoteParticipantEntity::getNoteRoom)
                 .map(NoteRoomEntity::getNoteRoomId)
                 .distinct()
                 .collect(Collectors.toList());
-
-        return rooms;
+        List<MessageRoomsResponseDTO> responseDTOList = new ArrayList<>();
+        for(Long roomId: rooms) {
+            NoteRoomEntity noteRoom = noteRoomRepository.findById(roomId)
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXIST_NOTE_ROOM));
+            NoteMessageEntity message = noteMessageRepository.findFirst1ByNoteRoomOrderBySentAtDesc(noteRoom);
+            UserEntity otherUser = noteParticipantRepository.findByNoteRoom(noteRoom).stream()
+                    .map(NoteParticipantEntity::getNoteParticipantId)
+                    .filter(noteParticipantId -> noteParticipantId.getUserIdx() != userIdx)
+                    .findFirst()
+                    .orElse(null);
+            MessageRoomsResponseDTO dto = MessageRoomsResponseDTO.builder()
+                    .currentMessage(message.getNoteMessage())
+                    .currentMessageTime(message.getSentAt())
+                    .duoId(Objects.requireNonNull(otherUser).getUserIdx())
+                    .duoName(otherUser.getNickname())
+                    .profileImageUrl(otherUser.getProfilePhotoUrl())
+                    .roomId(noteRoom.getNoteRoomId())
+                    .build();
+            responseDTOList.add(dto);
+        }
+        return responseDTOList;
     }
 }

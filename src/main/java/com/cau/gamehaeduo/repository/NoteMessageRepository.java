@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NoteMessageRepository extends JpaRepository<NoteMessageEntity, Long> {
     List<MessageContentMapping> findByNoteRoom(NoteRoomEntity noteRoom);
+    NoteMessageEntity findFirst1ByNoteRoomOrderBySentAtDesc(NoteRoomEntity noteRoom);
 }
