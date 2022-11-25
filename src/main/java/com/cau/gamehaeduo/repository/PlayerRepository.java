@@ -19,7 +19,7 @@ public interface PlayerRepository extends JpaRepository<PlayerEntity, Long> {
     @Query("select p from Player p where p.status= 'A' order by p.registeredAt desc")
     Page<PlayerEntity> findAllOrderBy_DateDesc(Pageable pageable);
 
-    List<PlayerEntity> findTop10ByOrderByUserRatingDesc();
+    List<PlayerEntity> findTop10ByStatusEqualsOrderByUserRatingDesc(String status);
 
     Page<PlayerEntity> findByStatusEquals(String status, Pageable pageable);
 
