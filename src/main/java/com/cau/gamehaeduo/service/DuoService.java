@@ -19,7 +19,7 @@ public class DuoService {
 
     public List<PlayerProfileResponseDTO> getAllPlayer(final Pageable pageable) {
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("registeredAt").descending());
-        Page<PlayerEntity> players = playerRepository.findAll(sortedPageable);  // 10개
+        Page<PlayerEntity> players = playerRepository.findByStatusEquals("A", sortedPageable);  // 10개
         List<PlayerProfileResponseDTO> playerProfiles = new ArrayList<>();
         for(PlayerEntity player : players) {
             playerProfiles.add(new PlayerProfileResponseDTO(player.getUser(), player));
