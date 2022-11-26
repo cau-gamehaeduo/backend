@@ -3,6 +3,7 @@ package com.cau.gamehaeduo.service;
 import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponseStatus;
 import com.cau.gamehaeduo.domain.duo.DuoEntity;
+import com.cau.gamehaeduo.domain.duo.DuoNumResDTO;
 import com.cau.gamehaeduo.domain.duo.DuoRequestDTO;
 import com.cau.gamehaeduo.domain.duo.DuoRequestResDTO;
 import com.cau.gamehaeduo.domain.player.PlayerEntity;
@@ -70,7 +71,15 @@ public class DuoService {
         return new DuoRequestResDTO(duoIdx, duoRequestDTO.getUserIdx(), user.getPoint(),duoEntity.getStatus());
     }
 
+    //듀오 신청 갯수 가져오기
+    public DuoNumResDTO getDuoNum(int userIdx){
 
+        UserEntity user = getUserEntity(userIdx);
+        int requestedDuoNum = duoRepository.countByRequestedUserId(user);
+        int requestNum = duoRepository.countByRequestUserId(user);
+
+        return new DuoNumResDTO(requestedDuoNum, requestNum);
+    }
 
     // userIdx로 UserEntity 객체 가져오는 함수
     private UserEntity getUserEntity(int userIdx) {

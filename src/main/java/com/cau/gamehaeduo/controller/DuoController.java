@@ -2,6 +2,7 @@ package com.cau.gamehaeduo.controller;
 
 import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponse;
+import com.cau.gamehaeduo.domain.duo.DuoNumResDTO;
 import com.cau.gamehaeduo.domain.duo.DuoRequestDTO;
 import com.cau.gamehaeduo.domain.duo.DuoRequestResDTO;
 import com.cau.gamehaeduo.domain.player.PlayerProfileResponseDTO;
@@ -45,4 +46,19 @@ public class DuoController {
         }
 
     }
+
+
+    //듀오 신청 갯수 가져오기
+    @GetMapping("/num")
+    public BaseResponse<DuoNumResDTO> getDuoNum(@RequestParam("userIdx") int userIdx){
+        try{
+            jwtService.validateAccessToken(userIdx);
+            return new BaseResponse<DuoNumResDTO>(duoService.getDuoNum(userIdx));
+        }
+        catch (BaseException e){
+            log.error(" API : api/duo/num" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
 }
