@@ -32,8 +32,6 @@ public class PlayerService {
     @Transactional
     public PlayerResponseDTO registerPlayer(MultipartFile mFile, PlayerRequestDTO requestDto) throws BaseException {
 
-
-
         String profilePhotoUrl;
         // 사용자 프로필 url 생성
         if(mFile.isEmpty()){

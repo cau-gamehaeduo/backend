@@ -18,6 +18,7 @@ public class CreateUserResDTO {
     private String profilePhotoUrl;
     private String status;
     private String isPlayer;
+    private Long point;
 
     private String jwtAccessToken;
     private String jwtRefreshToken;

@@ -16,5 +16,6 @@ public class UserLoginInfo {
     private String profilePhotoUrl;
     private String status;
     private String isPlayer;
+    private Long point;
 
 }
