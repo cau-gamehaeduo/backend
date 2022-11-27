@@ -86,5 +86,19 @@ public class DuoController {
         }
     }
 
+    //듀오 수락하기
+    @PostMapping("/accept")
+    public BaseResponse<AcceptDuoResDTO> acceptDuo(@RequestBody AcceptDuoRequestDTO acceptDuoRequestDTO ){
+        try{
+            jwtService.validateAccessToken(acceptDuoRequestDTO.getUserIdx());
+            return new BaseResponse<>(duoService.acceptDuo(acceptDuoRequestDTO));
+        }
+        catch (BaseException e){
+            log.error(" API : api/duo/accept" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
 
 }

@@ -107,6 +107,28 @@ public class DuoService {
         return new FinishDuoResDTO(finishDuoRequestDTO.getDuoIdx(), "FINISH", updatePoint);
     }
 
+    //듀오 수락하기
+    public AcceptDuoResDTO acceptDuo(AcceptDuoRequestDTO acceptDuoRequestDTO) throws BaseException {
+        //듀오 수락 API 호출한 사람이 요청받은 사람인지 검증
+        int duoIdx = acceptDuoRequestDTO.getDuoIdx();
+
+        DuoEntity duoEntity = duoRepository.findByDuoId(duoIdx);
+
+
+        //듀오 요청받은 사람이 아니면 에러
+        if(duoEntity.getRequestedUserId().getUserIdx() != acceptDuoRequestDTO.getUserIdx()){
+            throw new BaseException(BaseResponseStatus.DUO_ACCEPT_NOT_REQUESTED_USER);
+        }
+
+        //현재 듀오 상태가 수락 대기중인지 확인
+        if(!duoEntity.getStatus().equals("WAITING")){
+            throw new BaseException(BaseResponseStatus.DUO_NOT_WAITING);
+        }
+        duoRepository.updateDuoStatus("PROCEEDING", duoIdx);
+
+        return new AcceptDuoResDTO(acceptDuoRequestDTO.getDuoIdx(), "PROCEEDING");
+    }
+
 
 
     @Transactional
