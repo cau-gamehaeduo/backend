@@ -6,6 +6,7 @@ public enum DuoStatus {
     COMPLETE(3),
     CANCEL(4),
     REFUSAL(5);
+
     private final int status;
 
     DuoStatus(int status) {

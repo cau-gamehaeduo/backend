@@ -112,6 +112,7 @@ public class PlayerService {
         List<HomePartnerDTO> playerProfiles = new ArrayList<>();
         for(PlayerEntity player : players) {
             if(userIdx == player.getId()) continue;
+            if(player.getStatus().equals("I")) continue;
             playerProfiles.add(new HomePartnerDTO(
                     player.getId(),player.getPrice(),
                     player.getUser().getNickname(),
@@ -129,6 +130,7 @@ public class PlayerService {
 
         for (PlayerEntity player : players) {
             if(userIdx == player.getId()) continue;
+            if(player.getStatus().equals("I")) continue;
             playerProfiles.add(new HomePartnerDTO(
                     player.getId(), player.getPrice(),
                     player.getUser().getNickname(),
