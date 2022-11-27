@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PlayerProfileResponseDTO extends ProfileResponseDTO{
+    private int duoId;
     private String nickname;
     private String tier;
     private String playStyle;
@@ -17,6 +18,7 @@ public class PlayerProfileResponseDTO extends ProfileResponseDTO{
 
     public PlayerProfileResponseDTO(UserEntity user, PlayerEntity player) {
         super(user.getIsPlayer().equals("Y"), user.getTop(), user.getJungle(), user.getMid(), user.getAd(), user.getSupporter());
+        this.duoId = user.getUserIdx();
         this.profilePhotoUrl = user.getProfilePhotoUrl();
         this.nickname = user.getNickname();
         this.tier = player.getTier();
