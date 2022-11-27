@@ -77,7 +77,7 @@ public class DuoController {
     @PostMapping("/cancel")
     public BaseResponse<CancelDuoResDTO> cancelDuo(@RequestBody CancelDuoRequestDTO cancelDuoRequestDTO ){
         try{
-            //jwtService.validateAccessToken(finishDuoRequestDTO.getUserIdx());
+            jwtService.validateAccessToken(cancelDuoRequestDTO.getUserIdx());
             return new BaseResponse<>(duoService.cancelDuo(cancelDuoRequestDTO));
         }
         catch (BaseException e){
@@ -85,7 +85,6 @@ public class DuoController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-
 
 
 }
