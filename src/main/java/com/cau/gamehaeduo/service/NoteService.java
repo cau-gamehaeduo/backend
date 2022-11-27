@@ -161,13 +161,12 @@ public class NoteService {
 
 
     private UserEntity getUserEntity(int userIdx) {
-        List<UserEntity> userList = userRepository.selectByUserId(userIdx);
-        UserEntity user = userList.get(0);
+        UserEntity user = userRepository.selectByUserId(userIdx);
         return user;
     }
 
     public List<MessageRoomsResponseDTO> getUserRooms(int userIdx) throws BaseException {
-        UserEntity user = userRepository.selectByUserId(userIdx).get(0);
+        UserEntity user = userRepository.selectByUserId(userIdx);
         List<Long> rooms = noteParticipantRepository.findByNoteParticipantId(user).stream()
                 .map(NoteParticipantEntity::getNoteRoom)
                 .map(NoteRoomEntity::getNoteRoomId)

@@ -61,8 +61,7 @@ public class PlayerService {
 
     // userIdx로 UserEntity 객체 가져오는 함수
     private UserEntity getUserEntity(int userIdx) {
-        List<UserEntity> userList = userRepository.selectByUserId(userIdx);
-        UserEntity user = userList.get(0);
+        UserEntity user = userRepository.selectByUserId(userIdx);
         return user;
     }
 

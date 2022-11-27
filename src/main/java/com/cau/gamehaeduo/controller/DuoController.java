@@ -99,6 +99,25 @@ public class DuoController {
         }
     }
 
+    @GetMapping("/request")
+    public BaseResponse<List<DuoInfoResponseDTO>> getRequestDuo(@RequestParam("userIdx") int userId) {
+        try {
+            jwtService.validateAccessToken(userId);
+            return new BaseResponse<>(duoService.getRequestDuo(userId));
+        } catch (BaseException e) {
+            log.error(" API : api/duo/request" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 
-
+    @GetMapping("/requested")
+    public BaseResponse<List<DuoInfoResponseDTO>> getRequestedDuo(@RequestParam("userIdx") int userId) {
+        try {
+            jwtService.validateAccessToken(userId);
+            return new BaseResponse<>(duoService.getRequestedDuo(userId));
+        } catch (BaseException e) {
+            log.error(" API : api/duo/requested" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
