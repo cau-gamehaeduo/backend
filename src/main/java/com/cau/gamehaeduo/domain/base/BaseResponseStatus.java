@@ -56,7 +56,16 @@ public enum BaseResponseStatus {
      * 7000 Duo
      */
 
-    NOT_ENOUGH_POINT(false,7000, "포인트가 부족해 신청할 수 없습니다");
+
+    NOT_ENOUGH_POINT(false,7000, "포인트가 부족해 신청할 수 없습니다."),
+    NOT_REQUESTED_PLAYER(false, 7001, "듀오를 신청받은 사람만 완료 요청을 할 수 있습니다."),
+    DUO_NOT_PROCEEDING(false,7002, "듀오 진행중 상태에만 완료 요청을 할 수 있습니다."),
+    DUO_ALREADY_COMPLETE(false,7003, "이미 완료된 듀오입니다."),
+    DUO_ALREADY_CANCEL(false,7004, "이미 완료(취소)된 듀오입니다."),
+    DUO_NOT_PARTICIPATE_USER(false,7005, "듀오 참가자만 취소 요청을 할 수 있습니다."),
+    ;
+
+
     private final boolean isSuccess;
     private final int code;
     private final String message;

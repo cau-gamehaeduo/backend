@@ -2,9 +2,7 @@ package com.cau.gamehaeduo.controller;
 
 import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponse;
-import com.cau.gamehaeduo.domain.duo.DuoNumResDTO;
-import com.cau.gamehaeduo.domain.duo.DuoRequestDTO;
-import com.cau.gamehaeduo.domain.duo.DuoRequestResDTO;
+import com.cau.gamehaeduo.domain.duo.*;
 import com.cau.gamehaeduo.domain.player.PlayerProfileResponseDTO;
 import com.cau.gamehaeduo.service.DuoService;
 import com.cau.gamehaeduo.service.JwtService;
@@ -53,12 +51,41 @@ public class DuoController {
     public BaseResponse<DuoNumResDTO> getDuoNum(@RequestParam("userIdx") int userIdx){
         try{
             jwtService.validateAccessToken(userIdx);
-            return new BaseResponse<DuoNumResDTO>(duoService.getDuoNum(userIdx));
+            return new BaseResponse<>(duoService.getDuoNum(userIdx));
         }
         catch (BaseException e){
             log.error(" API : api/duo/num" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    //듀오 완료 하기
+    @PostMapping("/finish")
+    public BaseResponse<FinishDuoResDTO> finishDuo(@RequestBody FinishDuoRequestDTO finishDuoRequestDTO ){
+        try{
+            jwtService.validateAccessToken(finishDuoRequestDTO.getUserIdx());
+            return new BaseResponse<>(duoService.finishDuo(finishDuoRequestDTO));
+        }
+        catch (BaseException e){
+            log.error(" API : api/duo/num" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
+    //듀오 취소하기
+    @PostMapping("/cancel")
+    public BaseResponse<CancelDuoResDTO> cancelDuo(@RequestBody CancelDuoRequestDTO cancelDuoRequestDTO ){
+        try{
+            //jwtService.validateAccessToken(finishDuoRequestDTO.getUserIdx());
+            return new BaseResponse<>(duoService.cancelDuo(cancelDuoRequestDTO));
+        }
+        catch (BaseException e){
+            log.error(" API : api/duo/cancel" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
 
 }
