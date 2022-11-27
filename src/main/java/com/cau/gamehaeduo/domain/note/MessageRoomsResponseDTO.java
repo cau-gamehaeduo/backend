@@ -1,6 +1,6 @@
 package com.cau.gamehaeduo.domain.note;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,5 +18,5 @@ public class MessageRoomsResponseDTO {
     private String duoName;
     private String profileImageUrl;
     private String currentMessage;
-    private Timestamp currentMessageTime;
+    private LocalDateTime currentMessageTime;
 }

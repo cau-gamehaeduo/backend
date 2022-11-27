@@ -1,6 +1,6 @@
 package com.cau.gamehaeduo.domain.note;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +16,6 @@ public class MessageContentDTO {
     private Long messageId;
     private int senderId;
     private int receiverId;
-    private Timestamp sendAt;
+    private LocalDateTime sendAt;
     private String noteMessage;
 }

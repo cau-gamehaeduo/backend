@@ -1,13 +1,13 @@
 package com.cau.gamehaeduo.domain.note;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public interface MessageContentMapping {
     Long getMessageId();
     String getNoteMessage();
     MessageContent getSenderId();
     MessageContent getReceiverId();
-    Timestamp getSentAt();
+    LocalDateTime getSentAt();
     NoteRoomId getNoteRoom();
 
     interface MessageContent {
