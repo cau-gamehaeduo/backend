@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Table(name="User")
@@ -20,6 +21,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,8 +50,11 @@ public class UserEntity {
     @Column
     private int supporter;
 
+
     @Column(name = "kakao_id")
     private long kakaoIdx;
+
+    private int point;
 
     @OneToOne
     @PrimaryKeyJoinColumn
@@ -82,5 +87,32 @@ public class UserEntity {
         this.ad = ad;
         this.supporter = supporter;
         this.kakaoIdx = kakaoIdx;
+    }
+
+//    public void requestAndReducePoint(int price){
+//        this.point = point-price;
+//    }
+//
+//    public void requestedAndGetPoint(int price){
+//        this.point = point+price;
+//    }
+
+    public UserEntity(int userIdx, String nickname, String profilePhotoUrl, String isPlayer, float rating,
+                      String createdAt,
+                      String status, int top, int jungle, int mid, int ad, int supporter, long kakaoIdx, int point) {
+        this.userIdx = userIdx;
+        this.nickname = nickname;
+        this.profilePhotoUrl = profilePhotoUrl;
+        this.isPlayer = isPlayer;
+        this.rating = rating;
+        this.createdAt = createdAt;
+        this.status = status;
+        this.top = top;
+        this.jungle = jungle;
+        this.mid = mid;
+        this.ad = ad;
+        this.supporter = supporter;
+        this.kakaoIdx = kakaoIdx;
+        this.point = point;
     }
 }

@@ -31,11 +31,13 @@ public class PlayerService {
 
     @Transactional
     public PlayerResponseDTO registerPlayer(MultipartFile mFile, PlayerRequestDTO requestDto) throws BaseException {
+
         String profilePhotoUrl;
         // 사용자 프로필 url 생성
-        if (mFile.isEmpty()) {
+        if(mFile.isEmpty()){
             throw new BaseException(SIGNUP_EMPTY_USER_PROFILE);
-        } else {
+        }
+        else{
             try {
                 profilePhotoUrl = s3UploaderService.upload(mFile);
             } catch (IOException e) {
@@ -43,7 +45,8 @@ public class PlayerService {
             }
         }
 
-        userRepository.registerPlayer(requestDto.getUserIdx(), profilePhotoUrl);
+
+        userRepository.registerPlayer(requestDto.getUserIdx(),profilePhotoUrl);
 
         int userIndex = requestDto.getUserIdx();
         UserEntity user = getUserEntity(userIndex);
@@ -88,7 +91,7 @@ public class PlayerService {
 
     public PlayerProfileResponseDTO getOtherPlayerProfile(int playerIdx) throws BaseException {
         UserEntity otherUser = getUserEntity(playerIdx);
-        if (otherUser.getIsPlayer().equals("N")) {
+        if(otherUser.getIsPlayer().equals("N")) {
             throw new BaseException(BaseResponseStatus.PRIVATE_PLAYER_PROFILE);
         }
         PlayerEntity player = playerRepository.findById(playerIdx);
@@ -96,7 +99,7 @@ public class PlayerService {
     }
 
     public ProfileResponseDTO getPlayerProfile(int userIdx, Integer otherIdx) throws BaseException {
-        if (otherIdx == null) {
+        if(otherIdx == null) {
             return getUserPlayerProfile(userIdx);
         }
         return getOtherPlayerProfile(otherIdx);
@@ -104,12 +107,13 @@ public class PlayerService {
 
     //최근 등록한 플레이어 불러오기
     //(홈에서 세로 스크롤 호출시 사용)
-    public PlayerListDTO getRecentRegisteredPlayers(final Pageable pageable) {
+   public PlayerListDTO getRecentRegisteredPlayers(int userIdx, final Pageable pageable) {
         Page<PlayerEntity> players = playerRepository.findAllOrderBy_DateDesc(pageable);  // 10개
         List<HomePartnerDTO> playerProfiles = new ArrayList<>();
-        for (PlayerEntity player : players) {
+        for(PlayerEntity player : players) {
+            if(userIdx == player.getId()) continue;
             playerProfiles.add(new HomePartnerDTO(
-                    player.getId(), player.getPrice(),
+                    player.getId(),player.getPrice(),
                     player.getUser().getNickname(),
                     player.getUser().getProfilePhotoUrl(),
                     player.getTier(), player.getUser().getRating()));
@@ -117,12 +121,14 @@ public class PlayerService {
         return new PlayerListDTO(playerProfiles);
     }
 
+
     //평점 상위 10명 불러오기
-    public PlayerListDTO getHighRatingPlayers() {
+    public PlayerListDTO getHighRatingPlayers(int userIdx) {
         List<PlayerEntity> players = playerRepository.findTop10ByStatusEqualsOrderByUserRatingDesc("A");
         List<HomePartnerDTO> playerProfiles = new ArrayList<>();
 
         for (PlayerEntity player : players) {
+            if(userIdx == player.getId()) continue;
             playerProfiles.add(new HomePartnerDTO(
                     player.getId(), player.getPrice(),
                     player.getUser().getNickname(),

@@ -22,4 +22,7 @@ public class NoteRoomEntity {
     @Column(columnDefinition = "INT UNSIGNED", name ="note_room_id")
     private Long noteRoomId;
 
+
+
+
 }

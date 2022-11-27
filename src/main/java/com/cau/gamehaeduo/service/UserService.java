@@ -65,6 +65,7 @@ public class UserService {
                 profilePhotoUrl,
                 "Active",
                 "N",
+                200L,
                 jwtAccessToken,
                 jwtRefreshToken
                 );
@@ -84,6 +85,7 @@ public class UserService {
                 userLoginInfo.getProfilePhotoUrl(),
                 userLoginInfo.getStatus(),
                 userLoginInfo.getIsPlayer(),
+                userLoginInfo.getPoint(),
                 jwtAccessToken,
                 jwtRefreshToken
         );

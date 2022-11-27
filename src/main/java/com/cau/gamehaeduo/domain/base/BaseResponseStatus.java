@@ -50,9 +50,13 @@ public enum BaseResponseStatus {
     /**
      * 6000 Message
      */
-    NOT_EXIST_NOTE_ROOM(false, 6000, "존재하지 않는 대화방입니다.");
+    NOT_EXIST_NOTE_ROOM(false, 6000, "존재하지 않는 대화방입니다."),
 
+    /**
+     * 7000 Duo
+     */
 
+    NOT_ENOUGH_POINT(false,7000, "포인트가 부족해 신청할 수 없습니다");
     private final boolean isSuccess;
     private final int code;
     private final String message;

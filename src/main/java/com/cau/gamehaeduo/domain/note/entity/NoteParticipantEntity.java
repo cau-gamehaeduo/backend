@@ -30,6 +30,7 @@ public class NoteParticipantEntity {
     private UserEntity noteParticipantId;
 
 
+
     @ManyToOne
     @JoinColumn (name ="note_room_id")
     private NoteRoomEntity noteRoom ;

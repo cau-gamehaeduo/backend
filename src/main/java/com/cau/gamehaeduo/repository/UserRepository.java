@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 @Log4j2
 @Repository
-public class UserRepository {
+public class UserRepository{
 
     @Autowired
     public void setDataSource(DataSource dataSource){
@@ -63,7 +63,7 @@ public class UserRepository {
 
     public UserLoginInfo getUserLoginInfo(long kakaoIdx){
         String userLoginInfoQuery =
-                "select u.user_id, u.nickname, u.profile_photo_url, u.status, u.is_player\n" +
+                "select u.user_id, u.nickname, u.profile_photo_url, u.status, u.is_player, u.point\n" +
                         "from User u \n" +
                         "where u.kakao_id = ?";
 
@@ -75,7 +75,8 @@ public class UserRepository {
                             rs.getString("nickname"),
                             rs.getString("profile_photo_url"),
                             rs.getString("status"),
-                            rs.getString("is_player")
+                            rs.getString("is_player"),
+                            rs.getLong("point")
                     ),
                     kakaoIdx);
         }
@@ -99,7 +100,8 @@ public class UserRepository {
                         rs.getInt("mid"),
                         rs.getInt("ad"),
                         rs.getInt("supporter"),
-                        rs.getLong("kakao_id")
+                        rs.getLong("kakao_id"),
+                        rs.getInt("point")
                 ),
                 userIdx
                 );
@@ -126,4 +128,11 @@ public class UserRepository {
         String updatePlayerStateQuery = "update User set status = ? where user_id = ?";
         return this.jdbcTemplate.update(updatePlayerStateQuery, changedState, userId);
     }
+
+    public void updatePoint(int point,int userId) {
+        String updateUserPointQuery = "update User set point=? where user_id=?";
+        this.jdbcTemplate.update(updateUserPointQuery, point, userId);
+    }
+
+
 }

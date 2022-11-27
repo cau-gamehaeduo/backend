@@ -6,13 +6,11 @@ import com.cau.gamehaeduo.domain.note.MessageContentDTO;
 import com.cau.gamehaeduo.domain.note.MessageContentMapping;
 import com.cau.gamehaeduo.domain.note.MessageRoomsResponseDTO;
 import com.cau.gamehaeduo.domain.note.RoomMessageResponseDTO;
-import com.cau.gamehaeduo.domain.note.SendFirstNoteReqDTO;
-import com.cau.gamehaeduo.domain.note.SendFirstNoteResDTO;
-import com.cau.gamehaeduo.domain.note.SendNoteReqDTO;
-import com.cau.gamehaeduo.domain.note.SendNoteResDTO;
+import com.cau.gamehaeduo.domain.note.*;
 import com.cau.gamehaeduo.domain.note.entity.NoteMessageEntity;
 import com.cau.gamehaeduo.domain.note.entity.NoteParticipantEntity;
 import com.cau.gamehaeduo.domain.note.entity.NoteRoomEntity;
+import com.cau.gamehaeduo.domain.player.ParticipatingNoteRoomAndUserDTOInterface;
 import com.cau.gamehaeduo.domain.user.UserEntity;
 import com.cau.gamehaeduo.repository.NoteMessageRepository;
 import com.cau.gamehaeduo.repository.NoteParticipantRepository;
@@ -78,7 +76,6 @@ public class NoteService {
 
         noteMessageRepository.save(noteMessage);
 
-
         //쪽지 참가자 저장   쪽지 신청한 사람은 isNotePlayer 0 쪽지 받는 플레이너는 isNotePlayer 1
         NoteParticipantEntity noteSenderParticipantEntity = NoteParticipantEntity.builder()
                 .isNotePlayer(0)
@@ -110,7 +107,7 @@ public class NoteService {
 
     //쪽지 처음 전송
     //새 채팅방 생성후 그 채팅방에 저장
-    public SendFirstNoteResDTO sendFirstNote(SendFirstNoteReqDTO sendFirstNoteReqDTO) throws BaseException{
+    public SendNoteResDTO sendFirstNote(SendNoteReqDTO sendNoteReqDTO) throws BaseException{
         NoteRoomEntity noteRoom = NoteRoomEntity.builder().build();
 
         //새 쪽지방 생성
@@ -118,12 +115,12 @@ public class NoteService {
 
 
         //UserEntity 가져오기
-        UserEntity sendUser = getUserEntity(sendFirstNoteReqDTO.getSenderIdx().intValue());
-        UserEntity receiveUser = getUserEntity(sendFirstNoteReqDTO.getReceiverIdx().intValue());
+        UserEntity sendUser = getUserEntity(sendNoteReqDTO.getSenderIdx().intValue());
+        UserEntity receiveUser = getUserEntity(sendNoteReqDTO.getReceiverIdx().intValue());
 
         //쪽지 저장
         NoteMessageEntity noteMessage = NoteMessageEntity.builder()
-                .noteMessage(sendFirstNoteReqDTO.getNoteMessage())
+                .noteMessage(sendNoteReqDTO.getNoteMessage())
                 .senderId(sendUser)
                 .receiverId(receiveUser)
                 .noteRoom(noteRoomRepository.getReferenceById(noteRoomIdx))
@@ -157,9 +154,22 @@ public class NoteService {
         noteParticipantRepository.save(noteReceiverParticipantEntity);
 
 
-        return new SendFirstNoteResDTO(true,"상대방에게 첫 쪽지가 전송되었습니다.", noteRoomIdx);
+        return new SendNoteResDTO(true,"상대방에게 첫 쪽지가 전송되었습니다.", noteRoomIdx);
 
     }
+
+
+
+    public List<ParticipatingNoteRoomAndUserDTOInterface> getParticatingNoteRoomAndUserDTO(Long senderIdx){
+        return noteParticipantRepository.selectEveryParticipantInChatRoom(senderIdx);
+    }
+
+
+
+
+
+
+
 
     private UserEntity getUserEntity(int userIdx) {
         List<UserEntity> userList = userRepository.selectByUserId(userIdx);
