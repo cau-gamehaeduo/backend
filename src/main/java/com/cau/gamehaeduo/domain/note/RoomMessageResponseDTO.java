@@ -11,5 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomMessageResponseDTO {
+    private RoomPlayerProfileDTO duoProfile;
     private List<MessageContentDTO> message;
 }

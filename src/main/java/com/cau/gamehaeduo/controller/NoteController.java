@@ -47,7 +47,7 @@ public class NoteController {
 
                 for (ParticipatingNoteRoomAndUserDTOInterface eachUserInChatRoom : userParticipatingRoomAndUserList) {
                     log.info("채팅방 목록의 다른 유저 = " + eachUserInChatRoom.getParticipatingUserIdx() );
-                    if(eachUserInChatRoom.getParticipatingUserIdx() == sendNoteReqDTO.getReceiverIdx()){
+                    if(eachUserInChatRoom.getParticipatingUserIdx().equals(sendNoteReqDTO.getReceiverIdx())){
                         alreadyHaveRoom = true;
                         sendNoteReqDTO.setNoteRoomIdx(eachUserInChatRoom.getNoteRoomIdx());
                         break;
@@ -55,7 +55,7 @@ public class NoteController {
                 }
 
                 //이미 방이 있다면 그 방에 보내고 결과 전송
-                if(alreadyHaveRoom==true) {
+                if(alreadyHaveRoom) {
                     log.info("이미 방이 있음");
                     return new BaseResponse<>(noteService.sendNote(sendNoteReqDTO));
                 }//방이 없다면 방을 생성하고 그 방에 결과 저송
@@ -97,9 +97,12 @@ public class NoteController {
 //    }
 
     @GetMapping("/note/room")
-    public BaseResponse<RoomMessageResponseDTO> getMessages(@RequestParam("roomId") Long roomId) {
+    public BaseResponse<RoomMessageResponseDTO> getMessages(@RequestParam("roomId") Long roomId,
+                                                            @RequestParam("userIdx") int userId,
+                                                            @RequestParam("duoIdx") int duoId) {
         try {
-            return new BaseResponse<>(noteService.getRoomMessages(roomId));
+            jwtService.validateAccessToken(userId);
+            return new BaseResponse<>(noteService.getRoomMessages(roomId, duoId));
         } catch (BaseException e) {
             log.error(" API : api/note" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
             return new BaseResponse<>(e.getStatus());
