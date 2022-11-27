@@ -85,8 +85,8 @@ public class UserRepository{
         }
     }
 
-    public List<UserEntity> selectByUserId(int userIdx) {
-        return jdbcTemplate.query("select * from User where user_id = ?",
+    public UserEntity selectByUserId(int userIdx) {
+        List<UserEntity> result = jdbcTemplate.query("select * from User where user_id = ?",
                 (rs, row) -> new UserEntity(
                         rs.getInt("user_id"),
                         rs.getString("nickname"),
@@ -105,7 +105,7 @@ public class UserRepository{
                 ),
                 userIdx
                 );
-
+        return result.get(0);
     }
 
     //User 의 Player 상태 Y로 변경
