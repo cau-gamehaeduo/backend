@@ -65,10 +65,10 @@ public class NoteService {
     private DuoEntity getDuoStatus(int userId, int duoId) {
         UserEntity user = userRepository.selectByUserId(userId);
         UserEntity duoUser = userRepository.selectByUserId(duoId);
-        DuoEntity firstDuo = duoRepository.findFirstByRequestedUserIdAndRequestUserIdOrderByRequestTimeDesc(user,
+        DuoEntity firstDuo = duoRepository.findFirst1ByRequestedUserIdAndRequestUserIdOrderByRequestTimeDesc(user,
                 duoUser);
         if (firstDuo == null) {
-            DuoEntity secondDuo = duoRepository.findFirstByRequestedUserIdAndRequestUserIdOrderByRequestTimeDesc(
+            DuoEntity secondDuo = duoRepository.findFirst1ByRequestedUserIdAndRequestUserIdOrderByRequestTimeDesc(
                     duoUser, user);
             return secondDuo;
         }

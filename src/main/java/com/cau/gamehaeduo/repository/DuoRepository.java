@@ -16,7 +16,7 @@ public interface DuoRepository extends JpaRepository<DuoEntity,Long> {
     List<DuoEntity> findByRequestUserId(UserEntity user);
     List<DuoEntity> findByRequestedUserId(UserEntity user);
     DuoEntity findByDuoId(int duoId);
-    DuoEntity findFirstByRequestedUserIdAndRequestUserIdOrderByRequestTimeDesc(UserEntity requestedUser, UserEntity requestUser);
+    DuoEntity findFirst1ByRequestedUserIdAndRequestUserIdOrderByRequestTimeDesc(UserEntity requestedUser, UserEntity requestUser);
 
     @Transactional
     @Modifying
