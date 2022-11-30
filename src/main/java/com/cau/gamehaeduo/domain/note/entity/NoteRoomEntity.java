@@ -23,6 +23,4 @@ public class NoteRoomEntity {
     private Long noteRoomId;
 
 
-
-
 }

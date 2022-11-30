@@ -21,6 +21,8 @@ import com.cau.gamehaeduo.repository.PlayerRepository;
 import com.cau.gamehaeduo.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -60,24 +62,95 @@ public class DuoService {
         UserEntity user = getUserEntity(duoRequestDTO.getUserIdx());
         PlayerEntity player = playerRepository.findById(duoRequestDTO.getPlayerIdx());
 
-        DuoEntity duoEntity = new DuoEntity(
-                user,
-                player.getUser(), "WAITING",
-                player.getPrice()
-        );
-        int duoIdx = duoRepository.save(duoEntity).getDuoId();
 
-        int price = player.getPrice();
 
-        if (user.getPoint() < price) {
-            throw new BaseException(BaseResponseStatus.NOT_ENOUGH_POINT);
+        //가장 최신꺼 가져오고 만약 이미 그 사람에게 요청한 듀오가 (PROCEEDING 이거나 WAITING 이면 금지)
+        Optional<DuoEntity> duoEntity = duoRepository.selectExistRecentDuo(duoRequestDTO.getUserIdx(), duoRequestDTO.getPlayerIdx());
+
+        if(duoEntity.isPresent()){
+            if(duoEntity.get().getStatus().equals("PROCEEDING")){
+                throw new BaseException(BaseResponseStatus.DUO_ALREADY_PROCEEDING);
+            }else if(duoEntity.get().getStatus().equals("WAITING")){
+                throw new BaseException(BaseResponseStatus.DUO_ALREADY_WAITING);
+            }
+
+
+            DuoEntity newDuoEntity = new DuoEntity(
+                    user,
+                    player.getUser(), "WAITING",
+                    player.getPrice()
+            );
+            int duoIdx = duoRepository.save(newDuoEntity).getDuoId();
+
+
+
+            int price = player.getPrice();
+
+            if (user.getPoint() < price) {
+                throw new BaseException(BaseResponseStatus.NOT_ENOUGH_POINT);
+            }
+
+            //신청 유저의 포인트 감소
+            int pointAfter = user.getPoint() - price;
+            userRepository.updatePoint(pointAfter, user.getUserIdx());
+
+            return new DuoRequestResDTO(duoIdx, duoRequestDTO.getUserIdx(), pointAfter, newDuoEntity.getStatus());
+
+        }//기존 듀오가 존재 하지 않는다면 새로 만들기
+        else{
+            DuoEntity newDuoEntity = new DuoEntity(
+                    user,
+                    player.getUser(), "WAITING",
+                    player.getPrice()
+            );
+            int duoIdx = duoRepository.save(newDuoEntity).getDuoId();
+
+
+
+            int price = player.getPrice();
+
+            if (user.getPoint() < price) {
+                throw new BaseException(BaseResponseStatus.NOT_ENOUGH_POINT);
+            }
+
+            //신청 유저의 포인트 감소
+            int pointAfter = user.getPoint() - price;
+            userRepository.updatePoint(pointAfter, user.getUserIdx());
+
+            return new DuoRequestResDTO(duoIdx, duoRequestDTO.getUserIdx(), pointAfter, newDuoEntity.getStatus());
+
+
         }
 
-        //신청 유저의 포인트 감소
-        int pointAfter = user.getPoint() - price;
-        userRepository.updatePoint(pointAfter, user.getUserIdx());
+//        duoEntity.get().getStatus()
+//
+//        if(duoEntity.getStatus().equals("PROCEEDING")){
+//            throw new BaseException(BaseResponseStatus.DUO_ALREADY_PROCEEDING);
+//        }else if(duoEntity.getStatus().equals("WAITING")){
+//            throw new BaseException(BaseResponseStatus.DUO_ALREADY_WAITING);
+//        }
 
-        return new DuoRequestResDTO(duoIdx, duoRequestDTO.getUserIdx(), pointAfter, duoEntity.getStatus());
+
+//        DuoEntity newDuoEntity = new DuoEntity(
+//                user,
+//                player.getUser(), "WAITING",
+//                player.getPrice()
+//        );
+//        int duoIdx = duoRepository.save(newDuoEntity).getDuoId();
+//
+//
+//
+//        int price = player.getPrice();
+//
+//        if (user.getPoint() < price) {
+//            throw new BaseException(BaseResponseStatus.NOT_ENOUGH_POINT);
+//        }
+//
+//        //신청 유저의 포인트 감소
+//        int pointAfter = user.getPoint() - price;
+//        userRepository.updatePoint(pointAfter, user.getUserIdx());
+//
+//        return new DuoRequestResDTO(duoIdx, duoRequestDTO.getUserIdx(), pointAfter, newDuoEntity.getStatus());
     }
 
     //듀오 신청 갯수 가져오기
@@ -89,6 +162,9 @@ public class DuoService {
 
         return new DuoNumResDTO(requestedDuoNum, requestNum);
     }
+
+
+
 
 
     //듀오 완료하기
