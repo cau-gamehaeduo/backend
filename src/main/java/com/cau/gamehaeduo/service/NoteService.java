@@ -2,6 +2,7 @@ package com.cau.gamehaeduo.service;
 
 import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponseStatus;
+import com.cau.gamehaeduo.domain.duo.DuoEntity;
 import com.cau.gamehaeduo.domain.note.MessageContentDTO;
 import com.cau.gamehaeduo.domain.note.MessageContentMapping;
 import com.cau.gamehaeduo.domain.note.MessageRoomsResponseDTO;
@@ -15,6 +16,7 @@ import com.cau.gamehaeduo.domain.note.entity.NoteRoomEntity;
 import com.cau.gamehaeduo.domain.player.ParticipatingNoteRoomAndUserDTOInterface;
 import com.cau.gamehaeduo.domain.player.PlayerEntity;
 import com.cau.gamehaeduo.domain.user.UserEntity;
+import com.cau.gamehaeduo.repository.DuoRepository;
 import com.cau.gamehaeduo.repository.NoteMessageRepository;
 import com.cau.gamehaeduo.repository.NoteParticipantRepository;
 import com.cau.gamehaeduo.repository.NoteRoomRepository;
@@ -37,8 +39,9 @@ public class NoteService {
     private final NoteMessageRepository noteMessageRepository;
     private final UserRepository userRepository;
     private final PlayerRepository playerRepository;
+    private final DuoRepository duoRepository;
 
-    public RoomMessageResponseDTO getRoomMessages(Long roomId, int duoId) throws BaseException {
+    public RoomMessageResponseDTO getRoomMessages(Long roomId, int duoId, int userId) throws BaseException {
         NoteRoomEntity noteRoom = noteRoomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXIST_NOTE_ROOM));
         List<MessageContentMapping> noteMessages = noteMessageRepository.findByNoteRoom(noteRoom);
@@ -55,7 +58,21 @@ public class NoteService {
             );
         }
         PlayerEntity duoPlayer = playerRepository.findById(duoId);
-        return new RoomMessageResponseDTO(new RoomPlayerProfileDTO(duoPlayer), messageContents);
+        DuoEntity duoEntity = getDuoStatus(userId, duoId);
+        return new RoomMessageResponseDTO(new RoomPlayerProfileDTO(duoPlayer), messageContents, duoEntity, userId);
+    }
+
+    private DuoEntity getDuoStatus(int userId, int duoId) {
+        UserEntity user = userRepository.selectByUserId(userId);
+        UserEntity duoUser = userRepository.selectByUserId(duoId);
+        DuoEntity firstDuo = duoRepository.findFirstByRequestedUserIdAndRequestUserIdOrderByRequestTimeDesc(user,
+                duoUser);
+        if (firstDuo == null) {
+            DuoEntity secondDuo = duoRepository.findFirstByRequestedUserIdAndRequestUserIdOrderByRequestTimeDesc(
+                    duoUser, user);
+            return secondDuo;
+        }
+        return firstDuo;
     }
 
     //이미 쪽지 한적 있는 상대방에게 쪽지 전송

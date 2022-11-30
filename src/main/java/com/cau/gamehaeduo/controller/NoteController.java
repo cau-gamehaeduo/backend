@@ -101,8 +101,8 @@ public class NoteController {
                                                             @RequestParam("userIdx") int userId,
                                                             @RequestParam("duoIdx") int duoId) {
         try {
-            jwtService.validateAccessToken(userId);
-            return new BaseResponse<>(noteService.getRoomMessages(roomId, duoId));
+            //jwtService.validateAccessToken(userId);
+            return new BaseResponse<>(noteService.getRoomMessages(roomId, duoId, userId));
         } catch (BaseException e) {
             log.error(" API : api/note" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
             return new BaseResponse<>(e.getStatus());
