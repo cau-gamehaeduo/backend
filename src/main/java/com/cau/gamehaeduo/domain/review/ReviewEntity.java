@@ -29,7 +29,7 @@ public class ReviewEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
-    private int reviewId;
+    private Integer reviewId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewee_id")
