@@ -66,6 +66,11 @@ public enum BaseResponseStatus {
     DUO_NOT_PARTICIPATE_USER(false,7005, "듀오 참가자만 취소 요청을 할 수 있습니다."),
     DUO_ACCEPT_NOT_REQUESTED_USER(false,7006, "듀오 신청받은 사람만 수락을 할 수 있습니다."),
     DUO_NOT_WAITING(false,7007, "듀오가 수락 대기중이 아닙니다."),
+
+    DUO_ALREADY_WAITING(false,7008, "해당 유저에게 이미 듀오 신청 대기중입니다."),
+    DUO_ALREADY_PROCEEDING(false,7009, "해당 유저와 이미 듀오 진행중입니다."),
+
+
     ;
 
 

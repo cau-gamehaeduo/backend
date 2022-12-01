@@ -35,7 +35,7 @@ public class DuoController {
     public BaseResponse<DuoRequestResDTO> requestDuo(@RequestBody DuoRequestDTO duoRequestDTO){
 
         try{
-            jwtService.validateAccessToken(duoRequestDTO.getUserIdx());
+            //jwtService.validateAccessToken(duoRequestDTO.getUserIdx());
             return new BaseResponse<>(duoService.requestDuo(duoRequestDTO));
         }
         catch (BaseException e){

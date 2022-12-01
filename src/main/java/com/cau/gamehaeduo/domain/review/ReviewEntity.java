@@ -1,16 +1,10 @@
 package com.cau.gamehaeduo.domain.review;
 
+import com.cau.gamehaeduo.domain.duo.DuoEntity;
 import com.cau.gamehaeduo.domain.user.UserEntity;
 import java.time.LocalDateTime;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,4 +41,9 @@ public class ReviewEntity {
 
     @Column(name = "review_content")
     private String reviewContent;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name= "duo_id")
+    private DuoEntity duo;
+
 }
