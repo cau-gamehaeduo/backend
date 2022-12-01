@@ -39,6 +39,9 @@ public class DuoEntity {
     @Column(name="request_time")
     private Timestamp requestTime;
 
+    @Column(name="review_written")
+    private boolean reviewWritten;
+
     @Builder
     public DuoEntity(UserEntity requestUserId, UserEntity requestedUserId, String status, int price){
         this.requestUserId = requestUserId;
@@ -46,5 +49,10 @@ public class DuoEntity {
         this.status = status;
         this.price = price;
     }
+
+    public void setReviewWritten(boolean reviewWritten) {
+        this.reviewWritten = reviewWritten;
+    }
+
 
 }

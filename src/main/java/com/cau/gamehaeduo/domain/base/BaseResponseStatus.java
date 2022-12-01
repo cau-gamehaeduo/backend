@@ -27,9 +27,17 @@ public enum BaseResponseStatus {
 
 
     INVALID_ACCESS_KAKAO(false, 2010, "지원되지 않거나 잘못된 Kakao Access 토큰 입니다."),
+
     INVALID_REFRESH_KAKAO(false, 2011, "지원되지 않거나 잘못된 Kakao Refresh 토큰 입니다."),
     EXPIRED_ACCESS_KAKAO(false, 2012, "만료된 Kakao Access 토큰입니다. Kakao Refresh 토큰을 이용해서 새로운 Kakao Access 토큰을 발급 받으세요."),
     EXPIRED_REFRESH_KAKAO(false,2013,"만료된 Kakao Refresh 토큰입니다. 다시 로그인해주세요."),
+
+
+    /**
+     * 3000Review
+     */
+    REVIEW_ALREADY_WRITTEN(false, 3000, "해당 듀오에 대한 리뷰를 이미 작성했습니다."),
+    REVIEW_NOT_REQUEST_USER(false, 3001, "듀오를 신청한 사람만 리뷰를 남길 수 있습니다."),
 
     /**
     * 4000 Player

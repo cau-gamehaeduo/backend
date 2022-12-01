@@ -60,6 +60,11 @@ public class UserRepository {
                 checkKakaoMemberParam);
     }
 
+    public void updateRating(int userId){
+        String updateRatingQuery = "update User set rating = (select AVG(rating) from Review where reviewee_id = ?) where user_id = ?";
+        this.jdbcTemplate.update(updateRatingQuery, userId, userId);
+    }
+
 
     public UserLoginInfo getUserLoginInfo(long kakaoIdx) {
         String userLoginInfoQuery =

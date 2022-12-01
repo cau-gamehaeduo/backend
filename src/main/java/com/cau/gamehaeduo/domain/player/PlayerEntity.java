@@ -16,6 +16,7 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Table(name="Player")
 @Entity(name="Player")
@@ -52,8 +53,6 @@ public class PlayerEntity {
     @JoinColumn(name="user_id")
     private UserEntity user;
 
-
     @Column(name="registered_at")
-    private Timestamp registeredAt;
-
+    private LocalDateTime registeredAt;
 }
