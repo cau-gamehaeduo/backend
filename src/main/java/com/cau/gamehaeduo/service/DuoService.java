@@ -260,20 +260,24 @@ public class DuoService {
     public List<DuoInfoResponseDTO> getRequestDuo(int userId) {
         UserEntity user = userRepository.selectByUserId(userId);
         List<DuoEntity> requestDuos = duoRepository.findByRequestUserId(user);
-        return getDuoInfoResponseDTOS(requestDuos);
+        List<DuoInfoResponseDTO> responseDTOS = new ArrayList<>();
+        for (DuoEntity duo : requestDuos) {
+            UserEntity duoUser = userRepository.selectByUserId(duo.getRequestedUserId().getUserIdx());
+            PlayerEntity duoPlayer = playerRepository.findById(duo.getRequestedUserId().getUserIdx());
+            responseDTOS.add(new DuoInfoResponseDTO(duo, duoUser, duoPlayer));
+        }
+        return responseDTOS;
     }
 
     public List<DuoInfoResponseDTO> getRequestedDuo(int userId) {
         UserEntity user = userRepository.selectByUserId(userId);
         List<DuoEntity> requestDuos = duoRepository.findByRequestedUserId(user);
-        return getDuoInfoResponseDTOS(requestDuos);
-    }
-
-    private List<DuoInfoResponseDTO> getDuoInfoResponseDTOS(List<DuoEntity> requestDuos) {
         List<DuoInfoResponseDTO> responseDTOS = new ArrayList<>();
         for (DuoEntity duo : requestDuos) {
-            UserEntity duoUser = userRepository.selectByUserId(duo.getDuoId());
-            PlayerEntity duoPlayer = playerRepository.findById(duo.getDuoId());
+            UserEntity duoUser = userRepository.selectByUserId(duo.getRequestUserId().getUserIdx());
+            System.out.println(duoUser);
+            PlayerEntity duoPlayer = playerRepository.findById(duo.getRequestUserId().getUserIdx());
+            System.out.println(duoPlayer);
             responseDTOS.add(new DuoInfoResponseDTO(duo, duoUser, duoPlayer));
         }
         return responseDTOS;
