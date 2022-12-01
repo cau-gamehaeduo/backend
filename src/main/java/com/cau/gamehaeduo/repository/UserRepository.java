@@ -12,10 +12,10 @@ import org.springframework.stereotype.Repository;
 
 @Log4j2
 @Repository
-public class UserRepository{
+public class UserRepository {
 
     @Autowired
-    public void setDataSource(DataSource dataSource){
+    public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
@@ -44,7 +44,7 @@ public class UserRepository{
 
     public int checkNickname(String nickname) {
         String checkNicknameQuery = "select exists(select nickname from User where nickname=?)";
-        String  checkNicknameParam = nickname;
+        String checkNicknameParam = nickname;
         return this.jdbcTemplate.queryForObject(
                 checkNicknameQuery,
                 int.class,
@@ -53,7 +53,7 @@ public class UserRepository{
 
     public int checkKakaoMember(long kakaoIdx) {
         String checkKakaoMemberQuery = "select exists(select kakao_id from User where kakao_id=?)";
-        long  checkKakaoMemberParam = kakaoIdx;
+        long checkKakaoMemberParam = kakaoIdx;
         return this.jdbcTemplate.queryForObject(
                 checkKakaoMemberQuery,
                 int.class,
@@ -61,12 +61,11 @@ public class UserRepository{
     }
 
 
-    public UserLoginInfo getUserLoginInfo(long kakaoIdx){
+    public UserLoginInfo getUserLoginInfo(long kakaoIdx) {
         String userLoginInfoQuery =
                 "select u.user_id, u.nickname, u.profile_photo_url, u.status, u.is_player, u.point\n" +
                         "from User u \n" +
                         "where u.kakao_id = ?";
-
 
         try {
             return this.jdbcTemplate.queryForObject(userLoginInfoQuery,
@@ -79,8 +78,7 @@ public class UserRepository{
                             rs.getLong("point")
                     ),
                     kakaoIdx);
-        }
-        catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
@@ -104,7 +102,7 @@ public class UserRepository{
                         rs.getInt("point")
                 ),
                 userIdx
-                );
+        );
         return result.get(0);
     }
 
@@ -112,15 +110,15 @@ public class UserRepository{
     public void registerPlayer(int userIndex, String profilePhotoUrl) {
         String userRegisterPlayerQuery = "update User set is_player = ?, profile_photo_url = ? where user_id = ?";
         Object[] params = new Object[]{
-                "Y",profilePhotoUrl,userIndex
+                "Y", profilePhotoUrl, userIndex
         };
 
-        this.jdbcTemplate.update(userRegisterPlayerQuery,params);
+        this.jdbcTemplate.update(userRegisterPlayerQuery, params);
     }
 
     public int updatePlayerState(boolean status, int userId) {
         String changedState;
-        if(status) {
+        if (status) {
             changedState = "Active";
         } else {
             changedState = "Inactive";
@@ -129,10 +127,16 @@ public class UserRepository{
         return this.jdbcTemplate.update(updatePlayerStateQuery, changedState, userId);
     }
 
-    public void updatePoint(int point,int userId) {
+    public void updatePoint(int point, int userId) {
         String updateUserPointQuery = "update User set point=? where user_id=?";
         this.jdbcTemplate.update(updateUserPointQuery, point, userId);
     }
 
-
+    public float getPlayerRating(int userId) {
+        String searchPlayerRatingQuery = "select u.rating from User u where u.user_id=?";
+        float rating = this.jdbcTemplate.queryForObject(searchPlayerRatingQuery,
+                (rs, row) -> new Float(rs.getFloat("rating")),
+                userId);
+        return rating;
+    }
 }
