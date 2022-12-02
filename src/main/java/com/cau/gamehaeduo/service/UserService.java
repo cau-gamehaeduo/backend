@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import static com.cau.gamehaeduo.domain.base.BaseResponseStatus.SIGNUP_ALREADY_EXIST_NICKNAME;
+import static com.cau.gamehaeduo.domain.base.BaseResponseStatus.*;
 
 @Service
 @Log4j2
@@ -114,7 +113,76 @@ public class UserService {
 
 
 
+    // 사용자 생성
+    @Transactional
+    public CreateUserResDTO createIdUser(CreateIdUserReqDTO createIdUserReqDTO) throws BaseException {
 
+        // 닉네임 중복확인
+        checkNickname(createIdUserReqDTO.getNickname());
+
+        //profile 사진 임시 부여
+        String profilePhotoUrl = "https://post-phinf.pstatic.net/MjAxOTEwMjVfMjI3/MDAxNTcxOTg2MjI3ODEw.SG1Y3lnjADkcWM78IG2I-Qu_3VA_Hb-c9xbKmYhB3N8g.ZJ-OjMtdudOxaSuGHD9yhPdmsA7uSI--qPQGuWjptxkg.JPEG/image_5814618121571985358109.jpg?type=w1200";
+
+
+        // createUser 메소드에 넘겨줄 UserEntity 객체 생성
+        UserEntity userEntity = new UserEntity(
+                createIdUserReqDTO.getNickname(),
+                profilePhotoUrl,
+                createIdUserReqDTO.getTop(),
+                createIdUserReqDTO.getJungle(),
+                createIdUserReqDTO.getMid(),
+                createIdUserReqDTO.getAd(),
+                createIdUserReqDTO.getSupporter(),
+                createIdUserReqDTO.getId(),
+                createIdUserReqDTO.getPassword()
+        );
+
+
+        int userId = userRepository.createIdUser(userEntity);
+        // JWT !!!!!
+        String jwtAccessToken = jwtService.createAccessToken(userId);
+        String jwtRefreshToken = jwtService.createRefreshToken(userId);
+
+        return new CreateUserResDTO(true,
+                "회원가입에 성공하였습니다.",
+                userId,
+                createIdUserReqDTO.getNickname(),
+                profilePhotoUrl,
+                "Active",
+                "N",
+                200L,
+                jwtAccessToken,
+                jwtRefreshToken
+        );
+    }
+
+
+    public LoginResDTO loginIdUser(LoginIdReqDTO loginIdReqDTO) throws BaseException{
+        UserLoginInfo userLoginInfo = userRepository.getIdUserLoginInfo(loginIdReqDTO.getId(),loginIdReqDTO.getPassword());
+
+
+        //만약 ID와 PW가 일치하지 않는다면
+        if(userLoginInfo == null){
+            throw new BaseException(LOGIN_INFO_NOT_MATCH);
+        }
+
+        // JWT !!!!!
+        String jwtAccessToken = jwtService.createAccessToken(userLoginInfo.getUserId());
+        String jwtRefreshToken = jwtService.createRefreshToken(userLoginInfo.getUserId());
+
+
+        return new LoginResDTO(
+                "로그인에 성공하였습니다.",
+                userLoginInfo.getUserId(),
+                userLoginInfo.getNickname(),
+                userLoginInfo.getProfilePhotoUrl(),
+                userLoginInfo.getStatus(),
+                userLoginInfo.getIsPlayer(),
+                userLoginInfo.getPoint(),
+                jwtAccessToken,
+                jwtRefreshToken
+        );
+    }
 
     public CheckNicknameResDTO checkNickname(String nickname) throws BaseException{
 
@@ -130,6 +198,24 @@ public class UserService {
         } else {
             log.error("ILLEGAL_ARG_ERROR when call UserRepository.checkNickname() because nickname is already used");
             throw new BaseException(SIGNUP_ALREADY_EXIST_NICKNAME);
+
+        }
+    }
+
+    public CheckNicknameResDTO checkId(String id) throws BaseException{
+
+        int isIdExisted = 0;
+        try {
+            isIdExisted = userRepository.checkId(id);
+        } catch (Exception e) {
+            log.error("DATABASE_ERROR when call UserRepository.checkNickname()");
+        }
+
+        if (isIdExisted == 0) {
+            return new CheckNicknameResDTO(false, "사용 가능한 아이디입니다.");
+        } else {
+            log.error("ILLEGAL_ARG_ERROR when call UserRepository.checkNickname() because nickname is already used");
+            throw new BaseException(SIGNUP_ALREADY_EXIST_ID);
 
         }
     }

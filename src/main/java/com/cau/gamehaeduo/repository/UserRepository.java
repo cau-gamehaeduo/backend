@@ -42,6 +42,29 @@ public class UserRepository {
         return this.jdbcTemplate.queryForObject(lastInsertUserIdxQuery, int.class);
     }
 
+
+    public int createIdUser(UserEntity userEntity) {
+        // User 테이블에 데이터 추가
+        String createUserQuery = "insert into User(nickname, profile_photo_url, top, jungle, mid, ad, supporter, id, password) values(?,?,?,?,?,?,?,?,?)";
+        Object[] createUserParams = new Object[]{
+                userEntity.getNickname(),
+                userEntity.getProfilePhotoUrl(),
+                userEntity.getTop(),
+                userEntity.getJungle(),
+                userEntity.getMid(),
+                userEntity.getAd(),
+                userEntity.getSupporter(),
+                userEntity.getId(),
+                userEntity.getPassword()
+        };
+
+        this.jdbcTemplate.update(createUserQuery, createUserParams);
+
+        // userIdx 반환
+        String lastInsertUserIdxQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertUserIdxQuery, int.class);
+    }
+
     public int checkNickname(String nickname) {
         String checkNicknameQuery = "select exists(select nickname from User where nickname=?)";
         String checkNicknameParam = nickname;
@@ -49,6 +72,15 @@ public class UserRepository {
                 checkNicknameQuery,
                 int.class,
                 checkNicknameParam);
+    }
+
+    public int checkId(String id) {
+        String checkIdQuery = "select exists(select id from User where id=?)";
+        String checkIdParam = id;
+        return this.jdbcTemplate.queryForObject(
+                checkIdQuery,
+                int.class,
+                checkIdParam);
     }
 
     public int checkKakaoMember(long kakaoIdx) {
@@ -87,6 +119,30 @@ public class UserRepository {
             return null;
         }
     }
+
+    public UserLoginInfo getIdUserLoginInfo(String id, String password) {
+        String userLoginInfoQuery =
+                "select u.user_id, u.nickname, u.profile_photo_url, u.status, u.is_player, u.point\n" +
+                        "from User u \n" +
+                        "where u.id = ? and u.password = ?";
+
+        try {
+            return this.jdbcTemplate.queryForObject(userLoginInfoQuery,
+                    (rs, row) -> new UserLoginInfo(
+                            rs.getInt("user_id"),
+                            rs.getString("nickname"),
+                            rs.getString("profile_photo_url"),
+                            rs.getString("status"),
+                            rs.getString("is_player"),
+                            rs.getLong("point")
+                    ),
+                    id, password);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+
 
     public UserEntity selectByUserId(int userIdx) {
         List<UserEntity> result = jdbcTemplate.query("select * from User where user_id = ?",

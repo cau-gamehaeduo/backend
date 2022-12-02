@@ -49,7 +49,10 @@ public class UserEntity {
     private int ad;
     @Column
     private int supporter;
-
+    @Column
+    private String id;
+    @Column
+    private String password;
 
     @Column(name = "kakao_id")
     private long kakaoIdx;
@@ -87,6 +90,18 @@ public class UserEntity {
         this.ad = ad;
         this.supporter = supporter;
         this.kakaoIdx = kakaoIdx;
+    }
+
+    public UserEntity(String nickname, String profilePhotoUrl, int top, int jungle, int mid, int ad, int supporter, String id, String password) {
+        this.nickname = nickname;
+        this.profilePhotoUrl = profilePhotoUrl;
+        this.top = top;
+        this.jungle = jungle;
+        this.mid = mid;
+        this.ad = ad;
+        this.supporter = supporter;
+        this.id = id;
+        this.password = password;
     }
 
 //    public void requestAndReducePoint(int price){

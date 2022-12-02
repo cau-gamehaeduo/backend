@@ -82,8 +82,6 @@ public class DuoService {
             );
             int duoIdx = duoRepository.save(newDuoEntity).getDuoId();
 
-
-
             int price = player.getPrice();
 
             if (user.getPoint() < price) {

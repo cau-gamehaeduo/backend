@@ -48,13 +48,19 @@ public enum BaseResponseStatus {
     SIGNUP_INVALID_USER_PROFILE_PHOTO(false, 4002, "유효하지 않은 프로필 사진입니다."),
 
     /**
-     * 5000 SignUP
+     * 5000 SignUP , LogIn
      */
     SIGNUP_ALREADY_EXIST_KAKAO_MEMBER(false,5000, "이미 가입된 회원입니다."),
     SIGNUP_EMPTY_USER_NICKNAME(false, 5001, "닉네임을 입력해주세요."),
+
     SIGNUP_INVALID_USER_NICKNAME(false, 5002, "닉네임은 영어 또는 한글과 숫자를 조합한 2-10 자리만 가능합니다."),
+
     SIGNUP_ALREADY_EXIST_NICKNAME(false, 5003, "이미 사용중인 닉네임입니다."),
 
+    LOGIN_INFO_NOT_MATCH(false, 5004, "아이디 비밀번호를 다시 확인해주세요."),
+    SIGNUP_EMPTY_USER_ID(false, 5005, "아이디를 입력해주세요."),
+    SIGNUP_INVALID_USER_ID(false, 5006, "아이디는 영어와 숫자를 조합한 2-10 자리만 가능합니다."),
+    SIGNUP_ALREADY_EXIST_ID(false, 5007, "이미 사용중인 아이디입니다."),
     /**
      * 6000 Message
      */

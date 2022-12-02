@@ -4,10 +4,7 @@ import com.cau.gamehaeduo.domain.base.BaseException;
 import com.cau.gamehaeduo.domain.base.BaseResponse;
 import com.cau.gamehaeduo.domain.kakao.KakaoMemberCheckResDTO;
 import com.cau.gamehaeduo.domain.kakao.KakaoUserValidReqDTO;
-import com.cau.gamehaeduo.domain.user.CheckNicknameResDTO;
-import com.cau.gamehaeduo.domain.user.CreateUserReqDTO;
-import com.cau.gamehaeduo.domain.user.CreateUserResDTO;
-import com.cau.gamehaeduo.domain.user.LoginResDTO;
+import com.cau.gamehaeduo.domain.user.*;
 import com.cau.gamehaeduo.service.KakaoService;
 import com.cau.gamehaeduo.service.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -67,6 +64,61 @@ public class UserController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+
+    //id-pw 방식으로 회원가입 및 로그인
+    @PostMapping("/signUp-id")
+    public BaseResponse<CreateUserResDTO> createIdUser (@RequestBody CreateIdUserReqDTO createIdUserReqDTO){
+        try {
+
+            CreateUserResDTO result = userService.createIdUser(createIdUserReqDTO);
+            return new BaseResponse<>(result);
+
+        } catch (BaseException e) {
+            log.error(" API : api/signup" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @PostMapping("/login-id")
+    public BaseResponse<LoginResDTO> loginId (@RequestBody LoginIdReqDTO loginIdReqDTO){
+        try{
+            LoginResDTO result = userService.loginIdUser(loginIdReqDTO);
+            return new BaseResponse<>(result);
+        }catch (BaseException e){
+            log.error(" API : api/login" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
+    //id 중복 체크
+    @GetMapping("/id/dupli")
+    public BaseResponse<CheckNicknameResDTO> checkId(@RequestParam("id") String id) {
+        // 형식적 validation
+        if (id == null) {
+            return new BaseResponse<>(SIGNUP_EMPTY_USER_ID);
+        }
+        else{
+            String pattern = "^([a-zA-Z0-9]{2,10})$";
+
+            if (!Pattern.matches(pattern, id)){
+                return new BaseResponse<>(SIGNUP_INVALID_USER_ID);
+            }
+        }
+
+
+        try {
+            CheckNicknameResDTO result = userService.checkId(id);
+            return new BaseResponse<>(result);
+        } catch(BaseException e){
+            log.error(" API : api/id/dupli" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
+            return new BaseResponse<>(e.getStatus());
+        }
+
+    }
+
+
 
 
     @PostMapping("/userCheck")
