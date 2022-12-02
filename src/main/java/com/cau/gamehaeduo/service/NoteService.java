@@ -93,30 +93,6 @@ public class NoteService {
 
         noteMessageRepository.save(noteMessage);
 
-        //쪽지 참가자 저장   쪽지 신청한 사람은 isNotePlayer 0 쪽지 받는 플레이너는 isNotePlayer 1
-        NoteParticipantEntity noteSenderParticipantEntity = NoteParticipantEntity.builder()
-                .isNotePlayer(0)
-                .noteRoom(
-                        noteRoomRepository.getReferenceById(noteRoom.getNoteRoomId())
-                )
-                .noteParticipantId(
-                        sendUser
-                )
-                .build();
-
-        NoteParticipantEntity noteReceiverParticipantEntity = NoteParticipantEntity.builder()
-                .isNotePlayer(1)
-                .noteRoom(
-                        noteRoomRepository.getReferenceById(noteRoom.getNoteRoomId())
-                )
-                .noteParticipantId(
-                        receiveUser
-                )
-                .build();
-
-        noteParticipantRepository.save(noteSenderParticipantEntity);
-        noteParticipantRepository.save(noteReceiverParticipantEntity);
-
         return new SendNoteResDTO(true, "상대방에게  쪽지가 전송되었습니다.", noteRoom.getNoteRoomId());
     }
 
