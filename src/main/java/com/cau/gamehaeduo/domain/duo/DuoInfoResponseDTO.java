@@ -16,6 +16,7 @@ public class DuoInfoResponseDTO {
     private LocalDateTime requestTime;
     private String duoStatus;
     private boolean reviewWritten;
+    private String image;
 
     public DuoInfoResponseDTO(DuoEntity duo, UserEntity user, PlayerEntity player) {
         this.nickname = user.getNickname();
@@ -24,5 +25,6 @@ public class DuoInfoResponseDTO {
         this.requestTime = duo.getRequestTime().toLocalDateTime();
         this.duoStatus = duo.getStatus();
         this.reviewWritten = duo.isReviewWritten();
+        this.image = user.getProfilePhotoUrl();
     }
 }
