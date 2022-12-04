@@ -39,12 +39,6 @@ public class ReviewController {
     @GetMapping("/review")
     public BaseResponse<AllReviewRatingResponseDTO> getUserReviews(@RequestParam("userIdx") int userId,
                                                                    @RequestParam("page") Integer page) {
-        try {
-            jwtService.validateAccessToken(userId);
-            return new BaseResponse<>(reviewService.getUserReview(userId, page));
-        } catch (BaseException e) {
-            log.error(" API : GET api/review" +"\n Message : " + e.getMessage() +"\n Cause : " + e.getCause());
-            return new BaseResponse<>(e.getStatus());
-        }
+        return new BaseResponse<>(reviewService.getUserReview(userId, page));
     }
 }
