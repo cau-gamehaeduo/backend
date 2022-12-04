@@ -19,6 +19,7 @@ public class DuoInfoResponseDTO {
     private String image;
 
     public DuoInfoResponseDTO(DuoEntity duo, UserEntity user, PlayerEntity player) {
+        this.duoId = duo.getDuoId();
         this.nickname = user.getNickname();
         this.tier = player.getTier();
         this.price = player.getPrice();
