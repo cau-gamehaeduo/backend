@@ -15,6 +15,7 @@ public class DuoInfoResponseDTO {
     private int price;
     private LocalDateTime requestTime;
     private String duoStatus;
+    private boolean reviewWritten;
 
     public DuoInfoResponseDTO(DuoEntity duo, UserEntity user, PlayerEntity player) {
         this.nickname = user.getNickname();
@@ -22,5 +23,6 @@ public class DuoInfoResponseDTO {
         this.price = player.getPrice();
         this.requestTime = duo.getRequestTime().toLocalDateTime();
         this.duoStatus = duo.getStatus();
+        this.reviewWritten = duo.isReviewWritten();
     }
 }

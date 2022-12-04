@@ -25,7 +25,6 @@ import com.cau.gamehaeduo.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -159,29 +158,32 @@ public class NoteService {
     }
 
     public List<MessageRoomsResponseDTO> getUserRooms(int userIdx) throws BaseException {
-        UserEntity user = userRepository.selectByUserId(userIdx);
-        List<Long> rooms = noteParticipantRepository.findByNoteParticipantId(user).stream()
-                .map(NoteParticipantEntity::getNoteRoom)
-                .map(NoteRoomEntity::getNoteRoomId)
-                .distinct()
-                .collect(Collectors.toList());
+        //UserEntity user = userRepository.selectByUserId(userIdx);
+//        List<Long> rooms = noteParticipantRepository.findByNoteParticipantId(user).stream()
+//                .map(NoteParticipantEntity::getNoteRoom)
+//                .map(NoteRoomEntity::getNoteRoomId)
+//                .distinct()
+//                .collect(Collectors.toList());
+        List<NoteParticipantEntity> otherUserRooms = noteParticipantRepository.selectEveryOtherUserInUserChatRoom(userIdx);
         List<MessageRoomsResponseDTO> responseDTOList = new ArrayList<>();
-        for (Long roomId : rooms) {
-            NoteRoomEntity noteRoom = noteRoomRepository.findById(roomId)
-                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXIST_NOTE_ROOM));
-            NoteMessageEntity message = noteMessageRepository.findFirst1ByNoteRoomOrderBySentAtDesc(noteRoom);
-            UserEntity otherUser = noteParticipantRepository.findByNoteRoom(noteRoom).stream()
-                    .map(NoteParticipantEntity::getNoteParticipantId)
-                    .filter(noteParticipantId -> noteParticipantId.getUserIdx() != userIdx)
-                    .findFirst()
-                    .orElse(null);
+//        for (Long roomId : rooms) {
+        for(NoteParticipantEntity otherUserRoom : otherUserRooms) {
+//            NoteMessageEntity message = noteMessageRepository.findFirst1ByNoteRoom_NoteRoomIdOrderBySentAtDesc(roomId);
+//            UserEntity otherUser = noteParticipantRepository.findByNoteRoom_NoteRoomId(roomId).stream()
+//                    .map(NoteParticipantEntity::getNoteParticipantId)
+//                    .filter(noteParticipantId -> noteParticipantId.getUserIdx() != userIdx)
+//                    .findFirst()
+//                    .orElse(null);
+            NoteMessageEntity message = noteMessageRepository.findFirst1ByNoteRoom_NoteRoomIdOrderBySentAtDesc(otherUserRoom.getNoteRoom().getNoteRoomId());
+            UserEntity otherUser = otherUserRoom.getNoteParticipantId();
             MessageRoomsResponseDTO dto = MessageRoomsResponseDTO.builder()
                     .currentMessage(message.getNoteMessage())
                     .currentMessageTime(message.getSentAt())
                     .duoId(Objects.requireNonNull(otherUser).getUserIdx())
                     .duoName(otherUser.getNickname())
                     .profileImageUrl(otherUser.getProfilePhotoUrl())
-                    .roomId(noteRoom.getNoteRoomId())
+//                    .roomId(roomId)
+                    .roomId(otherUserRoom.getNoteRoom().getNoteRoomId())
                     .build();
             responseDTOList.add(dto);
         }
