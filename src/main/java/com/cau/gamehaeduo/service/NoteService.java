@@ -62,11 +62,14 @@ public class NoteService {
         }
         UserEntity userEntity = userRepository.selectByUserId(duoId);
         String isPlayer=  userEntity.getIsPlayer();
-        if(isPlayer.equals('Y')){
+        if(isPlayer.equals("Y")){
             PlayerEntity duoPlayer = playerRepository.findById(duoId);
             DuoEntity duoEntity = getDuoStatus(userId, duoId);
+
+
             return new RoomMessageResponseDTO(new RoomPlayerProfileDTO(duoPlayer), messageContents, duoEntity, userId);
         }else{
+
             DuoEntity duoEntity = getDuoStatus(userId, duoId);
             return new RoomMessageResponseDTO(new RoomPlayerProfileDTO(userEntity), messageContents, duoEntity, userId);
         }

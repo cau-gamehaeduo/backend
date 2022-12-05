@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @DynamicInsert
+@DynamicUpdate
 public class PlayerEntity {
     @Id
     @Column(columnDefinition = "INT UNSIGNED", name = "player_id")

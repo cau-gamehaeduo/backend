@@ -14,6 +14,7 @@ public class RoomMessageResponseDTO {
     private String duoStatus;
     private List<MessageContentDTO> message;
     private boolean isRequestUser;
+    private Integer duoIdx;
 
     public RoomMessageResponseDTO(RoomPlayerProfileDTO duoProfile, List<MessageContentDTO> message, DuoEntity duoEntity,
                                   int userId) {
@@ -22,7 +23,9 @@ public class RoomMessageResponseDTO {
         if (duoEntity == null) {
             this.duoStatus = null;
             this.isRequestUser = false;
+            this.duoIdx = null;
         } else {
+            this.duoIdx= duoEntity.getDuoId();
             this.duoStatus = duoEntity.getStatus();
             this.isRequestUser = duoEntity.getRequestUserId().getUserIdx() == userId;
         }
