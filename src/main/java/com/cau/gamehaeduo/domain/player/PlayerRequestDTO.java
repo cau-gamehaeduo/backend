@@ -1,6 +1,7 @@
 package com.cau.gamehaeduo.domain.player;
 
 import com.cau.gamehaeduo.domain.user.UserEntity;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class PlayerRequestDTO {
                 .playStyle(requestDto.playStyle)
                 .tier(requestDto.tier)
                 .user(user)
+                .registeredAt(LocalDateTime.now())
                 .build();
     }
 }
