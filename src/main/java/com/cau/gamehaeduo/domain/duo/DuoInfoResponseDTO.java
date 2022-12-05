@@ -28,4 +28,15 @@ public class DuoInfoResponseDTO {
         this.reviewWritten = duo.isReviewWritten();
         this.image = user.getProfilePhotoUrl();
     }
+
+    public DuoInfoResponseDTO(DuoEntity duo, UserEntity user) {
+        this.duoId = duo.getDuoId();
+        this.nickname = user.getNickname();
+        this.tier = null;
+        this.price = duo.getPrice();
+        this.requestTime = duo.getRequestTime().toLocalDateTime();
+        this.duoStatus = duo.getStatus();
+        this.reviewWritten = duo.isReviewWritten();
+        this.image = user.getProfilePhotoUrl();
+    }
 }

@@ -269,10 +269,17 @@ public class DuoService {
         UserEntity user = userRepository.selectByUserId(userId);
         List<DuoEntity> requestDuos = duoRepository.findByRequestedUserId(user);
         List<DuoInfoResponseDTO> responseDTOS = new ArrayList<>();
+
         for (DuoEntity duo : requestDuos) {
             UserEntity duoUser = userRepository.selectByUserId(duo.getRequestUserId().getUserIdx());
-            PlayerEntity duoPlayer = playerRepository.findById(duo.getRequestUserId().getUserIdx());
-            responseDTOS.add(new DuoInfoResponseDTO(duo, duoUser, duoPlayer));
+
+            if(duoUser.getIsPlayer().equals('Y')){
+                PlayerEntity duoPlayer = playerRepository.findById(duo.getRequestUserId().getUserIdx());
+                responseDTOS.add(new DuoInfoResponseDTO(duo, duoUser, duoPlayer));
+            }else {
+                responseDTOS.add(new DuoInfoResponseDTO(duo,duoUser));
+            }
+
         }
         return responseDTOS;
     }
