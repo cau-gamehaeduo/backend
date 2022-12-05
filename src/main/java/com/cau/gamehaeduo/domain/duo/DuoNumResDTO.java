@@ -10,4 +10,6 @@ import lombok.Setter;
 public class DuoNumResDTO {
     private int requestedDuoNum;
     private int requestDuoNum;
+    private int point;
+
 }

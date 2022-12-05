@@ -2,6 +2,7 @@ package com.cau.gamehaeduo.domain.note;
 
 import com.cau.gamehaeduo.domain.player.PlayerEntity;
 import com.cau.gamehaeduo.domain.player.ProfileResponseDTO;
+import com.cau.gamehaeduo.domain.user.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,5 +19,12 @@ public class RoomPlayerProfileDTO extends ProfileResponseDTO {
                 duo.getUser().getMid(), duo.getUser().getAd(), duo.getUser().getSupporter());
         this.tier = duo.getTier();
         this.price = duo.getPrice();
+    }
+
+    public RoomPlayerProfileDTO(UserEntity user) {
+        super(user.getIsPlayer().equals("Y"), user.getTop(), user.getJungle(),
+                user.getMid(), user.getAd(), user.getSupporter());
+        this.tier = null;
+        this.price = -1;
     }
 }

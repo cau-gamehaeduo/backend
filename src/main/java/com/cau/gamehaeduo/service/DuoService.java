@@ -62,8 +62,6 @@ public class DuoService {
         UserEntity user = getUserEntity(duoRequestDTO.getUserIdx());
         PlayerEntity player = playerRepository.findById(duoRequestDTO.getPlayerIdx());
 
-
-
         //가장 최신꺼 가져오고 만약 이미 그 사람에게 요청한 듀오가 (PROCEEDING 이거나 WAITING 이면 금지)
         Optional<DuoEntity> duoEntity = duoRepository.selectExistRecentDuo(duoRequestDTO.getUserIdx(), duoRequestDTO.getPlayerIdx());
 
@@ -157,8 +155,8 @@ public class DuoService {
         UserEntity user = getUserEntity(userIdx);
         int requestedDuoNum = duoRepository.countByRequestedUserId(user);
         int requestNum = duoRepository.countByRequestUserId(user);
-
-        return new DuoNumResDTO(requestedDuoNum, requestNum);
+        int point = user.getPoint();
+        return new DuoNumResDTO(requestedDuoNum, requestNum, point);
     }
 
 

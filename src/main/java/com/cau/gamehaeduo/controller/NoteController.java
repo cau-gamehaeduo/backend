@@ -83,25 +83,14 @@ public class NoteController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-//
-//    //처음 쪽지 보낼때 호출 API
-//    @PostMapping("/note/send/new")
-//    public BaseResponse<SendFirstNoteResDTO> sendFirstNote(@RequestBody SendFirstNoteReqDTO sendFirstNoteReqDTO){
-//        try{
-//            jwtService.validateAccessToken(sendFirstNoteReqDTO.getSenderIdx().intValue());
-//            return new BaseResponse<>(noteService.sendFirstNote(sendFirstNoteReqDTO));
-//        }catch(BaseException e){
-//            log.error(" API : api/note/send/new" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());
-//            return new BaseResponse<>(e.getStatus());
-//        }
-//    }
+
 
     @GetMapping("/note/room")
     public BaseResponse<RoomMessageResponseDTO> getMessages(@RequestParam("roomId") Long roomId,
                                                             @RequestParam("userIdx") int userId,
                                                             @RequestParam("duoIdx") int duoId) {
         try {
-            //jwtService.validateAccessToken(userId);
+            jwtService.validateAccessToken(userId);
             return new BaseResponse<>(noteService.getRoomMessages(roomId, duoId, userId));
         } catch (BaseException e) {
             log.error(" API : api/note" + "\n Message : " + e.getMessage() + "\n Cause : " + e.getCause());

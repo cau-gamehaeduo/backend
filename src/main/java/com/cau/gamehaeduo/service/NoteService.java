@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,7 +45,10 @@ public class NoteService {
     public RoomMessageResponseDTO getRoomMessages(Long roomId, int duoId, int userId) throws BaseException {
         NoteRoomEntity noteRoom = noteRoomRepository.findById(roomId)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXIST_NOTE_ROOM));
+
+
         List<MessageContentMapping> noteMessages = noteMessageRepository.findByNoteRoom(noteRoom);
+
         List<MessageContentDTO> messageContents = new ArrayList<>();
         for (MessageContentMapping messageContent : noteMessages) {
             messageContents.add(
@@ -57,9 +61,17 @@ public class NoteService {
                             .build()
             );
         }
-        PlayerEntity duoPlayer = playerRepository.findById(duoId);
-        DuoEntity duoEntity = getDuoStatus(userId, duoId);
-        return new RoomMessageResponseDTO(new RoomPlayerProfileDTO(duoPlayer), messageContents, duoEntity, userId);
+        UserEntity userEntity = userRepository.selectByUserId(duoId);
+        String isPlayer=  userEntity.getIsPlayer();
+        if(isPlayer.equals('Y')){
+            PlayerEntity duoPlayer = playerRepository.findById(duoId);
+            DuoEntity duoEntity = getDuoStatus(userId, duoId);
+            return new RoomMessageResponseDTO(new RoomPlayerProfileDTO(duoPlayer), messageContents, duoEntity, userId);
+        }else{
+            DuoEntity duoEntity = getDuoStatus(userId, duoId);
+            return new RoomMessageResponseDTO(new RoomPlayerProfileDTO(userEntity), messageContents, duoEntity, userId);
+        }
+
     }
 
     private DuoEntity getDuoStatus(int userId, int duoId) {

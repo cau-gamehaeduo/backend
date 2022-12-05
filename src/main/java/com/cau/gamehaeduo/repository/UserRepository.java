@@ -83,6 +83,14 @@ public class UserRepository {
                 checkIdParam);
     }
 
+    public String checkIsPlayer(String id) {
+        String checkIdQuery = "select is_player from User where id=?";
+        String checkIdParam = id;
+        return this.jdbcTemplate.queryForObject(checkIdQuery,
+                String.class,
+                checkIdParam);
+    }
+
     public int checkKakaoMember(long kakaoIdx) {
         String checkKakaoMemberQuery = "select exists(select kakao_id from User where kakao_id=?)";
         long checkKakaoMemberParam = kakaoIdx;

@@ -107,7 +107,6 @@ public class UserController {
             }
         }
 
-
         try {
             CheckNicknameResDTO result = userService.checkId(id);
             return new BaseResponse<>(result);
