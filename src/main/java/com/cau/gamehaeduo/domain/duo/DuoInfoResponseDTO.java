@@ -15,12 +15,17 @@ public class DuoInfoResponseDTO {
     private int price;
     private LocalDateTime requestTime;
     private String duoStatus;
+    private boolean reviewWritten;
+    private String image;
 
     public DuoInfoResponseDTO(DuoEntity duo, UserEntity user, PlayerEntity player) {
+        this.duoId = duo.getDuoId();
         this.nickname = user.getNickname();
         this.tier = player.getTier();
         this.price = player.getPrice();
         this.requestTime = duo.getRequestTime().toLocalDateTime();
         this.duoStatus = duo.getStatus();
+        this.reviewWritten = duo.isReviewWritten();
+        this.image = user.getProfilePhotoUrl();
     }
 }

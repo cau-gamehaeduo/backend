@@ -1,18 +1,14 @@
 package com.cau.gamehaeduo.repository;
 
 
-import com.cau.gamehaeduo.domain.note.ParticipatingNoteRoomAndUserDTO;
 import com.cau.gamehaeduo.domain.note.entity.NoteParticipantEntity;
-import com.cau.gamehaeduo.domain.note.entity.NoteRoomEntity;
 import com.cau.gamehaeduo.domain.player.ParticipatingNoteRoomAndUserDTOInterface;
-import com.cau.gamehaeduo.domain.player.PlayerEntity;
 import com.cau.gamehaeduo.domain.user.UserEntity;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface NoteParticipantRepository extends JpaRepository<NoteParticipantEntity, Long> {
@@ -27,6 +23,13 @@ public interface NoteParticipantRepository extends JpaRepository<NoteParticipant
 
 
     List<NoteParticipantEntity> findByNoteParticipantId(UserEntity user);
-    List<NoteParticipantEntity> findByNoteRoom(NoteRoomEntity noteRoom);
+    List<NoteParticipantEntity> findByNoteRoom_NoteRoomId(Long roomId);
+
+    @Query(value = "SELECT distinct p\n"+
+                    "FROM NoteParticipant n \n"+
+                    "INNER JOIN NoteParticipant p\n"+
+                    "ON n.noteParticipantId.userIdx = :userIdx\n"+
+                    "WHERE p.noteRoom = n.noteRoom AND p.noteParticipantId.userIdx <> :userIdx")
+    List<NoteParticipantEntity> selectEveryOtherUserInUserChatRoom(int userIdx);
 
 }

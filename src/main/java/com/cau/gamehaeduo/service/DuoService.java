@@ -271,9 +271,7 @@ public class DuoService {
         List<DuoInfoResponseDTO> responseDTOS = new ArrayList<>();
         for (DuoEntity duo : requestDuos) {
             UserEntity duoUser = userRepository.selectByUserId(duo.getRequestUserId().getUserIdx());
-            System.out.println(duoUser);
             PlayerEntity duoPlayer = playerRepository.findById(duo.getRequestUserId().getUserIdx());
-            System.out.println(duoPlayer);
             responseDTOS.add(new DuoInfoResponseDTO(duo, duoUser, duoPlayer));
         }
         return responseDTOS;
