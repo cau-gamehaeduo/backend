@@ -1,6 +1,7 @@
 package com.cau.gamehaeduo.domain.player;
 
 import com.cau.gamehaeduo.domain.user.UserEntity;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,9 +16,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Table(name="Player")
 @Entity(name="Player")
