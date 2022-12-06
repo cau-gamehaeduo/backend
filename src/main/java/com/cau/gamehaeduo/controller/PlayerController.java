@@ -34,7 +34,7 @@ public class PlayerController {
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public BaseResponse<PlayerResponseDTO> registerPlayer(@RequestPart("mFile") MultipartFile mFile,
                                                           @Valid @RequestPart("playerDto") PlayerRequestDTO playerDto) throws BaseException {
-        //rjwtService.validateAccessToken(playerDto.getUserIdx());
+        jwtService.validateAccessToken(playerDto.getUserIdx());
         PlayerResponseDTO result = playerService.registerPlayer(mFile, playerDto);
         return new BaseResponse<>(result);
     }
@@ -43,7 +43,7 @@ public class PlayerController {
     public BaseResponse<ProfileResponseDTO> getPlayerProfile(@RequestParam("userIdx") int userIdx,
                                                                      @RequestParam(value = "otherIdx", required = false) Integer otherIdx){
         try {
-            jwtService.validateAccessToken(userIdx);
+            //jwtService.validateAccessToken(userIdx);
             ProfileResponseDTO result = playerService.getPlayerProfile(userIdx, otherIdx);
             return new BaseResponse<>(result);
         } catch (BaseException exception) {

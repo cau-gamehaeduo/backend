@@ -18,4 +18,5 @@ public class UserLoginInfo {
     private String isPlayer;
     private Long point;
 
+
 }

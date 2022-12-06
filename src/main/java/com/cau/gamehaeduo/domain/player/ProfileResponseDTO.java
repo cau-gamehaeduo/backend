@@ -16,4 +16,5 @@ public class ProfileResponseDTO {
     private int mid;
     private int ad;
     private int supporter;
+
 }

@@ -15,6 +15,7 @@ public class PlayerProfileResponseDTO extends ProfileResponseDTO{
     private float rating;
     private String profilePhotoUrl;
     private int price;
+    private String playerProfileStatus;
 
     public PlayerProfileResponseDTO(UserEntity user, PlayerEntity player) {
         super(user.getIsPlayer().equals("Y"), user.getTop(), user.getJungle(), user.getMid(), user.getAd(), user.getSupporter());
@@ -26,5 +27,6 @@ public class PlayerProfileResponseDTO extends ProfileResponseDTO{
         this.introduction = player.getIntroduction();
         this.rating = user.getRating();
         this.price = player.getPrice();
+        this.playerProfileStatus = player.getStatus();
     }
 }
