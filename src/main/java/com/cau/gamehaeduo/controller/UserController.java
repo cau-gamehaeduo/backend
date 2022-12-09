@@ -57,6 +57,7 @@ public class UserController {
         try{
             long kakaoIdx = kakaoService.checkKakaoUser(kakaoUserValidReqDTO.getAccessToken());
             LoginResDTO result = userService.loginUser(kakaoIdx);
+            log.info(" API : api/login 호출 \n" + "카카오 로그인 할거면 나한테 연락하라 했는데 안하고 하는 사람들!");
             return new BaseResponse<>(result);
 
         }catch (BaseException e){
