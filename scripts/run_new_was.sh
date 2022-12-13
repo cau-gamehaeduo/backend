@@ -25,7 +25,7 @@ fi
 
 
 nohup java -jar -Duser.timezone=KST -Dserver.port=${TARGET_PORT} /home/ubuntu/var/www/backend/build/libs/*.jar --spring.profiles.active=prod > /home/ubuntu/nohup.out 2>&1 &
-#nohup java -jar -Duser.timezone=KST -Dserver.port=8082 /home/ubuntu/var/www/backend/build/libs/*.jar --spring.profiles.active=prod &
+#nohup java -jar -Duser.timezone=KST -Dserver.port=8081 /home/ubuntu/var/www/backend/build/libs/*.jar --spring.profiles.active=prod &
 
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0
