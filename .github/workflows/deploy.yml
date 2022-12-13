@@ -1,0 +1,73 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+
+# on:
+#   workflow_dispatch:
+  
+env: 
+  S3_BUCKET_NAME: gamehaeduo-bucket-deploy
+  PROJECT_NAME: gamehaeduo
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        shell: bash
+
+      - name: Build with Gradle
+        run: ./gradlew build
+        shell: bash
+        env:
+          GAME_RDS_URL: ${{ secrets.GAME_RDS_URL }}
+          GAME_RDS_USERNAME: ${{ secrets.GAME_RDS_USERNAME }}
+          GAME_RDS_PASSWORD: ${{ secrets.GAME_RDS_PASSWORD }}
+          GAME_REDIS_HOST: ${{ secrets.GAME_REDIS_HOST }}
+          GAME_REDIS_PORT: ${{ secrets.GAME_REDIS_PORT }}
+          GAME_S3_ACCESSKEY: ${{ secrets.GAME_S3_ACCESS_KEY }}
+          GAME_S3_SECRETKEY: ${{ secrets.GAME_S3_SECRET_KEY }}
+          GAME_S3_REGION: ap-northeast-2
+          GAME_S3_BUCKET: ${{ secrets.GAME_S3_BUCKET }}
+          GAME_JWT_SECRETKEY: ${{ secrets.GAME_JWT_SECRETKEY }}
+          
+      - name: Make zip file
+        run: zip -r ./$GITHUB_SHA.zip .
+        shell: bash
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
+        
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name gamehaeduo-deploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name game-deploy-group --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip        
+        
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job. status }}
+          author_name: Github Action
+          fields: repo, message, commit, author, action, eventName, ref, workflow, job, took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
+        if: always()        
