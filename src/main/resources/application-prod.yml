@@ -1,0 +1,41 @@
+spring:
+  config:
+    name: gameHaeDuo
+    activate:
+      on-profile: prod
+
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${GAME_RDS_URL}
+    username: ${GAME_RDS_USERNAME}
+    password: ${GAME_RDS_PASSWORD}
+
+    redis:
+      host: ${GAME_REDIS_HOST}
+      port: ${GAME_REDIS_PORT}
+
+  servlet:
+    multipart:
+      maxFileSize: 25MB
+      maxRequestSize: 25MB
+
+jwt:
+  secret: ${GAME_JWT_SECRETKEY}
+
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${GAME_S3_ACCESSKEY}
+      secretKey: ${GAME_S3_SECRETKEY}
+    s3:
+      bucket: ${GAME_S3_BUCKET}
+    region:
+      static: ${GAME_S3_REGION}
+    stack:
+      auto: false

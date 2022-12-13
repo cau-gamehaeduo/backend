@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source:  /
-    destination: /home/ubuntu/var/www/BOB_Server
+    destination: /home/ubuntu/var/www/backend
     overwrite: yes
 
 permissions:
